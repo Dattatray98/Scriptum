@@ -1,0 +1,6 @@
+openai-whisper
+pydub
+ffmpeg-python
+fastAPI
+uvicorn 0.38.0
+python-multipart
