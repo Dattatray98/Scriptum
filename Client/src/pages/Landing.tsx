@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "../components/Navbar";
-const Home = () => {
+const Landing = () => {
     const [file, setFile] = useState<File | null>(null);
     const [trancecript, setTranscript] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -100,4 +100,4 @@ const Home = () => {
     )
 }
 
-export default Home
+export default Landing;
