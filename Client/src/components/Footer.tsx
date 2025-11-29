@@ -18,7 +18,7 @@ const Footer = () => {
                             </div>
                         </div>
                         <p className="text-sm mb-4 leading-relaxed">
-                             PlacementOS helps students discover the right direction in education and career. Get clear guidance, resources, and a roadmap to move from confusion to confidence.
+                             Transform your audio and video content into accurate, professional transcripts with enterprise-grade AI. Supports real-time processing, and industry-leading accuracy that saves hours of manual work.
                         </p>
                         <div className="flex space-x-4">
                             {[
@@ -119,7 +119,7 @@ const Footer = () => {
                     <div>
                         <h3 className="text-white text-lg font-semibold mb-4 pb-2 border-b border-white/20">Stay Updated</h3>
                         <p className="text-sm mb-4 leading-relaxed">
-                            Subscribe to our newsletter for the latest updates and educational resources.
+                            Subscribe to our newsletter for the latest updates.
                         </p>
                         <form className="space-y-3">
                             <div className="flex flex-col sm:flex-row gap-2">
@@ -146,7 +146,7 @@ const Footer = () => {
                 {/* Copyright */}
                 <div className="border-t border-gray-800 mt-12 pt-8 text-center text-sm">
                     <p className="text-gray-500">
-                        © {currentYear} PlacementOS. All rights reserved. |
+                        © {currentYear} ScripTum. All rights reserved. |
                         <a href="/terms&conditions" className="hover:text-white ml-2">Terms of Service</a> |
                         <a href="/privacypolicy" className="hover:text-white ml-2">Privacy Policy</a>
                     </p>

@@ -40,8 +40,6 @@ const Scriptum = () => {
                     <div className=" border absolute top-10 left-10 w-[400px] h-[400px] bg-purple-300 rounded-full blur-3xl opacity-40"></div>
 
                     {/* Blurry blob 2 */}
-
-                    {/* Blurry blob 3 */}
                     <div className="absolute bottom-[10%] left-[50%] w-[300px] h-[300px] bg-pink-300 rounded-full blur-2xl opacity-30"></div>
 
 

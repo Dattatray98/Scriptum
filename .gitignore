@@ -2,3 +2,4 @@
 *.venv
 *srt
 *audio
+*node_modules

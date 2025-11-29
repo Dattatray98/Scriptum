@@ -26,7 +26,7 @@ const TranscriptTab: React.FC<any> = ({ srtFile, Transcript }) => {
                 </div>
             </div>
             <div className=" h-[92.5%] border border-gray-200 shadow-sm rounded-xl transition-all duration-700 bg-white p-5">
-                <div className={`overflow-y-auto scrollbar-hidden  py-2 px-5 ${Transcript ? "border-y-2 border-gray-300 rounded-2xl" : ""}`}>
+                <div className={`overflow-y-auto scrollbar-hidden  py-2 px-5 ${Transcript ? "border-y-2 border-gray-300 rounded-2xl" : ""}`}  >
                     <p className="text-lg font-medium text-gray-700">{Transcript}</p>
                 </div>
             </div>
