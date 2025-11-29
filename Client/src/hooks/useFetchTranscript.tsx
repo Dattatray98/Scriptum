@@ -1,9 +1,12 @@
 import axios from "axios";
 import { useState } from "react"
+import { useNavigate } from "react-router-dom";
 
 export const useFetchTranscript = (file: File | null) => {
     const [Loading, setLoading] = useState<boolean>(false);
     const [Transcript, setTranscript] = useState("");
+    const [srtFile, setSrtFile] = useState("");
+    const navigate = useNavigate();
 
     const transcriptfetching = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -25,6 +28,14 @@ export const useFetchTranscript = (file: File | null) => {
             );
 
             setTranscript(response.data.result);
+            setSrtFile(response.data.srt_file)
+            console.log(response.data.srt_file)
+            navigate("/transcript", {
+                state: {
+                    text: response.data.result,
+                    srtFile: response.data.srt_file
+                }
+            })
         } catch (error) {
             console.log(error);
         } finally {
@@ -32,5 +43,5 @@ export const useFetchTranscript = (file: File | null) => {
         }
     }
 
-    return { Transcript, Loading, transcriptfetching };
+    return { Transcript, Loading, srtFile, transcriptfetching };
 };
