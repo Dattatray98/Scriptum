@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 
-export const useDownloadFile = (filename: string) => {
+export const useDownloadFile = (filename: string, videoName: string) => {
     const [loadingsrt, setLoading] = useState(false);
 
     const DownloadSRT = async () => {
@@ -36,7 +36,7 @@ export const useDownloadFile = (filename: string) => {
     const DownloadPDF = async () => {
         setLoading(true);
 
-        const response = await axios.get(`http://localhost:8000/download/pdf/${filename}`,
+        const response = await axios.get(`http://localhost:8000/download/pdf/${filename}/${videoName}`,
             { responseType: "blob" }
         );
 

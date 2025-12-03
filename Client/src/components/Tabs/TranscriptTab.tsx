@@ -6,10 +6,10 @@ const Downloadformat = [
     { id: 2, label: "pdf" }
 ]
 
-const TranscriptTab: React.FC<any> = ({ srtFile, Transcript }) => {
+const TranscriptTab: React.FC<any> = ({ srtFile, Transcript, videoName }) => {
     const [formateOpetion, setFormateOpetion] = useState<boolean>(false);
 
-    const { DownloadSRT, DownloadPDF } = useDownloadFile(srtFile)
+    const { DownloadSRT, DownloadPDF } = useDownloadFile(srtFile, videoName )
 
     const handleTransFileDownload = (file: string) => {
         if (file == "SRT") {

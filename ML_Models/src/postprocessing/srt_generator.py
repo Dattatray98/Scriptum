@@ -2,6 +2,7 @@
 
 from pathlib import Path
 from typing import Iterable, Dict, Any
+import math
 
 
 def format_timestamp(seconds: float) -> str:
@@ -17,28 +18,48 @@ def format_timestamp(seconds: float) -> str:
     return f"{hrs:02}:{mins:02}:{secs:02},{ms:03}"
 
 
-def save_srt(segments: Iterable[Dict[str, Any]], output_path: str | Path) -> Path:
-    out_path = Path(output_path)
-    if out_path.is_dir():
-        out_path = out_path / "output.srt"
+max_duration = 3.0
 
-    lines = []
-    for idx, seg in enumerate(segments, start=1):
-        # Use dict indexing (NOT calling) and guard against missing keys
-        start = seg.get("start", 0.0)
-        end = seg.get("end", start + seg.get("duration", 0.3))
-        text = seg.get("text", "").strip()
-        if not text:
-            continue  # skip empty segments
 
-        start_ts = format_timestamp(float(start))
-        end_ts = format_timestamp(float(end))
+def Split_Segments(segment):
+    start = segment["start"]
+    end = segment["end"]
+    text = segment["text"].strip()
 
-        block = f"{idx}\n{start_ts} --> {end_ts}\n{text}\n"
-        lines.append(block)
+    words = text.split()
+    duration = end - start
 
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines))
+    if duration <= max_duration:
+        return [(start, end, text)]
 
-    return out_path, lines
+    chunk_count = math.ceil(duration / max_duration)
+    words_per_chunk = math.ceil(len(words) / chunk_count)
+
+    subtitles = []
+
+    for i in range(chunk_count):
+        chunk_start = start + i * max_duration
+        chunk_end = min(start + (i + 1) * max_duration, end)
+
+        chunk_words = words[i * words_per_chunk : (i + 1) * words_per_chunk]
+        chunk_text = " ".join(chunk_words)
+
+        subtitles.append((chunk_start, chunk_end, chunk_text))
+
+    return subtitles
+
+
+def save_srt(segments, filepath):
+    counter = 1
+
+    with open(filepath, "w", encoding="utf-8") as f:
+        for seg in segments:
+            split_segs = Split_Segments(seg)
+
+            for start, end, text in split_segs:
+                f.write(f"{counter}\n")
+                f.write(f"{format_timestamp(start)} --> {format_timestamp(end)} \n")
+                f.write(f"{text}" + "\n\n")
+                counter += 1
+
+                

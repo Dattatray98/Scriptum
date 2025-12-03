@@ -18,6 +18,14 @@ export const useFetchTranscript = (file: File | null) => {
         const formData = new FormData();
         formData.append("file", file);
 
+        const clean_videoName = file.name
+            .normalize("NFKD")                   // normalize emoji/accents
+            .replace(/[^\w\s-]/g, "")            // remove emojis + special chars
+            .replace(/\s+/g, "_")                // replace spaces with underscore
+            .slice(0, 50);
+
+        console.log(clean_videoName);
+
         try {
             setLoading(true);
             const response = await axios.post(`${import.meta.env.VITE_SCRIPTUM_ROUTE}`,
@@ -29,11 +37,13 @@ export const useFetchTranscript = (file: File | null) => {
 
             setTranscript(response.data.result);
             setSrtFile(response.data.srt_file)
+
             console.log(response.data.srt_file)
             navigate("/transcript", {
                 state: {
                     text: response.data.result,
-                    srtFile: response.data.srt_file
+                    srtFile: response.data.srt_file,
+                    videoName: clean_videoName
                 }
             })
         } catch (error) {

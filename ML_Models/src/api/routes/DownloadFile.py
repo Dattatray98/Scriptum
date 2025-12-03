@@ -15,17 +15,18 @@ async def download_srt(filename: str):
     return FileResponse(srt_path, media_type="text/srt", filename=filename)
 
 
-@router.get("/pdf/{filename}/{videoname}")
-async def download_pdf(filename: str):
+@router.get("/pdf/{filename}/{videoName}")
+async def download_pdf(filename: str, videoName: str):
     srt_path = Path("srt") / filename
     if not srt_path.exists():
         return {"error": "File not found"}
 
     # original filename
     raw_name = Path(filename).stem
+    print(videoName)
 
     try:
-        pdf_path_str = await run_in_threadpool(srt_to_text, str(srt_path), raw_name)
+        pdf_path_str = await run_in_threadpool(srt_to_text, str(srt_path), raw_name, videoName)
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"PDF generation error: {e}")

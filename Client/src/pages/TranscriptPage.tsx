@@ -9,7 +9,7 @@ const TranscriptPage = () => {
     const [IsSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
 
     const location = useLocation();
-    const { text, srtFile } = location.state || {}
+    const { text, srtFile, videoName } = location.state || {}
 
     const handleSidebar = () => {
         setIsSidebarOpen(!IsSidebarOpen);
@@ -18,7 +18,7 @@ const TranscriptPage = () => {
     return (
         <div className='flex h-screen p-5 gap-2 bg-black'>
             <Sidebar IsSidebarOpen={IsSidebarOpen} handleSidebar={handleSidebar} />
-            <TranscriptTab Transcript={text} srtFile={srtFile} />
+            <TranscriptTab Transcript={text} srtFile={srtFile} videoName={videoName} />
         </div>
     )
 }
