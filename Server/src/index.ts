@@ -1,17 +1,9 @@
 
-import express, { Request, Response } from "express";
+import express from "express";
 import { MongoConnect } from "./configs/MongoDB.config";
-import CreateUser from "./routers/user.route";
-const app = express();
+import app from "./app";
 
 const PORT = 5000;
 MongoConnect();
 
-app.get("/", (req: Request, res: Response) => {
-    res.send("Scriptum server started")
-});
-
-
-app.use("/api", CreateUser);
-
-app.listen(PORT, () => console.log("server started at http://localhost:8000"));
+app.listen(PORT, () => console.log(`server started at http://localhost:${PORT}`));   

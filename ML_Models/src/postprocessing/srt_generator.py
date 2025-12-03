@@ -18,14 +18,6 @@ def format_timestamp(seconds: float) -> str:
 
 
 def save_srt(segments: Iterable[Dict[str, Any]], output_path: str | Path) -> Path:
-    """
-    Save Whisper-like segments into a valid .srt file.
-
-    segments: iterable of dicts with at least 'start', 'end', 'text' keys
-    output_path: path to write the .srt (string or Path). If a directory is given,
-                 a default filename will be used.
-    Returns the Path to the written file.
-    """
     out_path = Path(output_path)
     if out_path.is_dir():
         out_path = out_path / "output.srt"
@@ -34,7 +26,7 @@ def save_srt(segments: Iterable[Dict[str, Any]], output_path: str | Path) -> Pat
     for idx, seg in enumerate(segments, start=1):
         # Use dict indexing (NOT calling) and guard against missing keys
         start = seg.get("start", 0.0)
-        end = seg.get("end", start + seg.get("duration", 1.0))
+        end = seg.get("end", start + seg.get("duration", 0.3))
         text = seg.get("text", "").strip()
         if not text:
             continue  # skip empty segments

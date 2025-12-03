@@ -16,7 +16,7 @@ const TranscriptPage = () => {
     }
 
     return (
-        <div className='flex h-screen p-5 gap-2 bg-linear-to-br from-[#f0e9fd] via-[#eef3ff] to-[#f3e6ff]'>
+        <div className='flex h-screen p-5 gap-2 bg-black'>
             <Sidebar IsSidebarOpen={IsSidebarOpen} handleSidebar={handleSidebar} />
             <TranscriptTab Transcript={text} srtFile={srtFile} />
         </div>

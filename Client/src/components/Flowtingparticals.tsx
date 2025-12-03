@@ -6,7 +6,7 @@ const Flowtingparticals = () => {
             {[...Array(20)].map((_, i) => (
                 <motion.div
                     key={i}
-                    className="absolute rounded-full bg-purple-800"
+                    className="absolute rounded-full bg-purple-400"
                     initial={{
                         x: Math.random() * window.innerWidth,
                         y: Math.random() * window.innerHeight,

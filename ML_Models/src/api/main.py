@@ -4,9 +4,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.config.whisper import model
 from src.postprocessing.srt_generator import save_srt
 from pathlib import Path
-from fastapi.responses import FileResponse
+from src.api.routes.DownloadFile import router as download_route
 
-app = FastAPI()
+app = FastAPI(title="ScripTum ML API")
 
 origins = [
     "http://localhost:5174",
@@ -69,9 +69,9 @@ async def scriptum(file: UploadFile = File(...)):
     }
 
 
-@app.get("/download/{filename}")
-async def download_srt(filename: str):
-    srt_path = Path("srt") / filename
-    if not srt_path.exists():
-        return {"error": "File not found"}
-    return FileResponse(srt_path, media_type="text/srt", filename=filename)
+@app.get("/")
+def root():
+    return {"status": "ScripTum ML API Running"}
+
+
+app.include_router(download_route)

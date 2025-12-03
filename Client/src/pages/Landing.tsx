@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { WiStars } from "react-icons/wi";
 import Flowtingparticals from "../components/Flowtingparticals";
+import SignUp from "../components/Auth/SignUp";
 
 
 const card_data = [
@@ -15,7 +16,7 @@ const card_data = [
 const Feature_Data = [
     { id: 1, heading: "Fast AI Transcription", subheading: "Process hours of audio in minutes with our lightning-fast AI engine." },
     { id: 2, heading: "99% Accuracy", subheading: "Industry-leading accuracy that captures every word with precision." },
-    { id: 2, heading: "Multi-Language Support", subheading: "Transcribe in 50+ languages with native-level understanding." },
+    { id: 3, heading: "Multi-Language Support", subheading: "Transcribe in 50+ languages with native-level understanding." },
 ]
 
 const edit_data = [
@@ -25,18 +26,19 @@ const edit_data = [
 ]
 
 const bottom_text = [
-    {id:1, label:"COMPANY"},
-    {id:2, label:"STARTUP"},
-    {id:3, label: "BRAND"},
-    {id:4, label: "AGENCY"},
-    {id:5, label: "STUDIO"}
+    { id: 1, label: "COMPANY" },
+    { id: 2, label: "STARTUP" },
+    { id: 3, label: "BRAND" },
+    { id: 4, label: "AGENCY" },
+    { id: 5, label: "STUDIO" }
 ]
 
 
 const Landing = () => {
     const [count, setCount] = useState(0);
-    const words = ["Faster", "Accurate", "Automatic"];
+    const [LoginOpen, setLoginOpen] = useState<boolean>(false);
 
+    const words = ["Faster", "Accurate", "Automatic"];
     useEffect(() => {
         const interval = setInterval(() => {
             setCount((prev) => (prev + 1) % words.length);
@@ -46,26 +48,40 @@ const Landing = () => {
     }, []);
 
 
+    useEffect(() => {
+        if (LoginOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+    }, [LoginOpen]);
+
     return (
         <>
-            <div className="bg-[url('/transcriptbg.jpg')] bg-cover h-screen ">
+            {/* <div className="bg-[url('/transcriptbg.jpg')] bg-cover h-screen "> */}
+            <div className="bg-black h-screen ">
                 <div className="w-full flex justify-center">
-                    <Navbar />
+                    <Navbar LoginOpen={LoginOpen} />
                 </div>
+                <AnimatePresence>
+                    {LoginOpen && (
+                        <SignUp setLoginOpen={setLoginOpen} LoginOpen={LoginOpen} />
+                    )}
+                </AnimatePresence>
 
-                <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-pink-300 rounded-full blur-2xl opacity-30"></div>
-                <div className="absolute top-3 left-[30vh] w-[450px] h-[450px] bg-blue-900 blur-[100px] rounded-full  opacity-40"></div>
+                <div className="absolute top-0 left-0 w-[350px] h-[350px] bg-pink-300 rounded-full blur-[140px] opacity-30"></div>
+                <div className="absolute top-3 left-[35vh] w-[450px] h-[450px] bg-blue-900 blur-[150px] rounded-full  opacity-40"></div>
 
-                <div className="flex items-center h-full z-10">
-                    <div className="h-full w-[60%] flex flex-col  justify-center pl-[8vh]">
-                        <div className="w-58 z-10 bg-white rounded-3xl border border-purple-200 shadow-sm px-3 py-1.5 flex items-center gap-2 mb-10">
-                            <WiStars className="text-purple-600 h-7 w-7 animate-pulse" />
-                            <button className=" bg-linear-to-br bg-clip-text text-transparent from-purple-600 via-blue-700 to-blue-800 font-medium">Powered by NeuroEon</button>
+                <div className="flex items-center h-full z-11">
+                    <div className="h-full w-[60%] flex flex-col justify-center pl-[8vh]">
+                        <div className="w-58 z-10 bg-transparent rounded-3xl border border-purple-200 shadow-sm px-3 py-1.5 flex items-center gap-2 mb-10">
+                            <WiStars className="text-purple-300 h-7 w-7 animate-pulse" />
+                            <button className=" bg-linear-to-br bg-clip-text text-transparent from-purple-300 via-blue-100 to-blue-300 font-medium">Powered by NeuroEon</button>
                         </div>
                         <Flowtingparticals />
 
-                        <div className="flex flex-col gap-3">
-                            <h1 className="text-shadow-2xs text-6xl font-normal flex gap-3 justify-start">Transcription Made
+                        <div className="flex flex-col gap-3 z-11">
+                            <h1 className="text-shadow-2xs text-white text-6xl font-normal flex gap-3 justify-start">Transcription Made
                                 <motion.div className=" inline-block overflow-hidden w-auto  h-16 items-center">
                                     <AnimatePresence mode="wait">
                                         <motion.span
@@ -74,25 +90,26 @@ const Landing = () => {
                                             animate={{ opacity: 1, y: 0 }}
                                             exit={{ opacity: 0, y: -60 }}
                                             transition={{ duration: 1, ease: "easeInOut" }}
-                                            className="inline-block"
+                                            className="inline-block text-white"
                                         >
                                             {words[count]}
                                         </motion.span>
                                     </AnimatePresence>
                                 </motion.div>
                             </h1>
-                            <div className="text-shadow-2xs text-6xl mt-3 font-normal flex h-20 gap-3">with<h1 className="bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">ScripTum</h1></div>
-                            <p className="text-shadow-2xs text-lg text-gray-600 font-medium mt-2">Turn your audio and video into clear, reliable text in seconds — with ScripTum.</p>
+                            <div className="text-shadow-2xs text-6xl text-white mt-3 font-normal flex h-20 gap-3 z-11">with<h1 className="bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">ScripTum</h1></div>
+                            <p className="text-shadow-2xs text-lg text-gray-300 font-medium mt-2">Turn your audio and video into clear, reliable text in seconds — with ScripTum.</p>
                         </div>
 
-                        <div className=" flex gap-5 mt-15">
-                            <button className="py-3 px-[8vh] font-medium text-lg text-white rounded-xl shadow-md cursor-pointer bg-linear-to-br from-red-600 via-purple-500 to-purple-900">Get Started</button>
-                            <button className="py-3 px-[8vh] font-medium text-lg text-white rounded-xl shadow-md cursor-pointer bg-linear-to-br from-gray-800 via-gray-600 to-gray-900">Learn More</button>
+                        <div className=" flex gap-5 mt-15 z-11">
+                            <button className="py-3 px-[8vh] font-medium text-lg text-black rounded-xl shadow-md bg-white cursor-pointer hover:scale-[0.90] transition-all duration-500 " onClick={() => setLoginOpen(!LoginOpen)}>Get Started</button>
+
+                            <button className="py-3 px-[8vh] font-medium text-lg text-white rounded-xl shadow-md border border-white cursor-pointer hover:scale-[0.90] transition-all duration-500">Learn More</button>
                         </div>
                     </div>
 
                     <div style={{ perspective: '1400px' }} className="mr-[10vh] animate-pulse hover:animate-none">
-                        <div className="h-75 w-[68vh] border border-gray-200 shadow-[0_20px_60px_rgba(0,0,0,0.12),0_8px_24px_rgba(0,0,0,0.08)] rounded-4xl bg-white p-8 hover:scale-[1.02] transition-all duration-500 transform-[rotateY(-18deg)_rotateX(7deg)] hover:transform-[rotateY(0deg)_rotateX(0deg)]"
+                        <div className="h-75 w-[68vh] border border-gray-700 backdrop-blur-3xl bg-white/5 shadow-[0_20px_60px_rgba(0,0,0,0.12),0_8px_24px_rgba(0,0,0,0.08)] rounded-4xl bg-g p-8 hover:scale-[1.02] transition-all duration-500 transform-[rotateY(-18deg)_rotateX(7deg)] hover:transform-[rotateY(0deg)_rotateX(0deg)] "
                             style={{
                                 transformStyle: 'preserve-3d'
                             }}>
@@ -118,64 +135,80 @@ const Landing = () => {
                 </div>
             </div >
 
-            <div className=" px-10 py-[5vh]">
-                <div className=" w-full p-[10vh] flex gap-8">
-                    {Feature_Data.map((items) => (
-                        <div key={items.id} className="h-[30vh] w-[50vh] rounded-4xl border border-purple-100 hover:border-purple-200 transition-all duration-500 hover:shadow-[0_15px_70px_-28px_rgba(69,4,132,0.6)] hover:-translate-y-2 p-8">
-                            <h1 className="font-normal text-3xl">{items.heading}</h1>
-                            <p className="text-lg text-gray-500">{items.subheading}</p>
-                        </div>
-                    ))}
-                </div>
+            <div className=" px-10 py-[5vh] bg-black">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        initial={{ scale: 0.90 }}
+                        whileInView={{ scale: 1 }}
+                        exit={{ scale: 0.90 }}
+                        transition={{ duration: 0.8, ease: "easeInOut", type:"tween", stiffness: 120, damping:20 }}
+                        className=" w-full p-[10vh] flex gap-8">
+                        {Feature_Data.map((items) => (
+                            <div
+                                key={items.id} className="h-[30vh] w-[50vh] rounded-4xl bg-gray-950 border border-gray-800  transition-all duration-500 hover:shadow-[0_20px_80px_-28px_rgba(141,167,251,0.6)] hover:-translate-y-2 p-8">
+                                <h1 className="font-normal text-white text-3xl">{items.heading}</h1>
+                                <p className="text-lg text-gray-500">{items.subheading}</p>
+                            </div>
+                        ))}
+                    </motion.div>
+                </AnimatePresence>
 
             </div>
-            <div className="w-full flex flex-col items-center py-[10vh]">
-                <div className="w-[49.5%] flex flex-col items-center justify-center">
-                    <h1 className="text-6xl text-center flex gap-3 text-gray-800">The Transcript Editor <h1 className="bg-linear-to-r from-indigo-500 via-indigo-400 to-blue-300 bg-clip-text text-transparent">You'll Love</h1></h1>
-                    <p className="text-2xl text-center text-gray-600 mt-3">A beautiful, intuitive interface designed for professionals who demand precision.</p>
-                </div>
-                <div className="h-screen w-full px-[15vh] py-[10vh]">
-                    <div className="hover:-translate-y-6 border border-gray-200 backdrop:blur-3xl shadow-2xl h-[70vh] w-auto rounded-4xl relative transition-all duration-500">
-                        <div className="absolute top-10 left-10 w-[400px] h-[400px] bg-pink-300 rounded-full blur-[120px] opacity-30"></div>
-                        <div className="absolute bottom-10 right-10 w-[300px] h-[300px] bg-blue-900 blur-[150px] rounded-full  opacity-40"></div>
-                         <div className=" border absolute top-[10vh] right-[50vh] w-[400px] h-[400px] bg-purple-300 rounded-full blur-[150px] opacity-40"></div>
 
-                        <div className="flex justify-between items-center z-11 border-b border-purple-100 rounded-t-4xl p-8">
-                            <div className="flex gap-2 items-center">
-                                <div className="bg-gray-300 h-4 w-4 rounded-full"></div>
-                                <div className="bg-gray-300 h-4 w-4 rounded-full"></div>
-                                <div className="bg-gray-300 h-4 w-4 rounded-full"></div>
+            <div className="w-full flex flex-col items-center py-[10vh] bg-black">
+                <motion.div
+                    initial={{ scale: 0.80 }}
+                    whileInView={{ scale: 1 }}
+                    transition={{ duration: 0.4, ease: "easeInOut" }}
+                    className="w-[49.5%] flex flex-col items-center justify-center">
+                    <h1 className="text-6xl text-center flex gap-3 text-gray-300">The Transcript Editor <p className="bg-linear-to-r from-indigo-500 via-indigo-400 to-blue-300 bg-clip-text text-transparent">You'll Love</p></h1>
+                    <p className="text-2xl text-center text-gray-500 mt-3">A beautiful, intuitive interface designed for professionals who demand precision.</p>
+                </motion.div>
+                <AnimatePresence>
+
+                    <motion.div
+                        initial={{ scale: 0.80 }}
+                        whileInView={{ scale: 1 }}
+                        exit={{ scale: 0.80 }}
+                        transition={{ duration: 0.7, ease: "easeInOut", }}
+                        className="h-screen w-full px-[15vh] py-[10vh] ">
+                        <div className="hover:-translate-y-6 border border-gray-800 backdrop-blur-3xl shadow-[0_0_80px_-24px_rgba(141,167,251,0.6)] h-[70vh] w-auto rounded-4xl relative transition-all duration-500  bg-gray-950">
+                          
+
+                            <div className="flex justify-between items-center z-11 border-b border-purple-100 rounded-t-4xl p-8">
+                                <div className="flex gap-2 items-center">
+                                    <div className="bg-gray-300 h-4 w-4 rounded-full"></div>
+                                    <div className="bg-gray-300 h-4 w-4 rounded-full"></div>
+                                    <div className="bg-gray-300 h-4 w-4 rounded-full"></div>
+                                </div>
+                                <div className="flex gap-8 items-center">
+                                    <p className="py-2 px-4 border border-gray-200 text-white rounded-xl shadow-sm">Transcript</p>
+                                    <p className="py-2 px-4 border border-gray-200 text-white rounded-xl shadow-sm">Analysis</p>
+                                    <p className="py-2 px-4 border border-gray-200 text-white rounded-xl shadow-sm">Export</p>
+                                </div>
+                                <div className="flex gap-5">
+                                    <button className="py-2 px-5 border border-gray-200 text-white shadow-sm rounded-md">Share</button>
+                                    <button className="py-2 px-5 shadow-sm rounded-md bg-purple-500 text-white">Export</button>
+                                </div>
                             </div>
-                            <div className="flex gap-8 items-center">
-                                <p className="py-2 px-4 border border-gray-200 rounded-xl shadow-sm">Transcript</p>
-                                <p className="py-2 px-4 border border-gray-200 rounded-xl shadow-sm">Analysis</p>
-                                <p className="py-2 px-4 border border-gray-200 rounded-xl shadow-sm">Export</p>
-                            </div>
-                            <div className="flex gap-5">
-                                <button className="py-2 px-5 border border-gray-200 shadow-sm rounded-md">Share</button>
-                                <button className="py-2 px-5 shadow-sm rounded-md bg-purple-500 text-white">Export</button>
+                            <div className="flex w-full h-[83.5%] z-11">
+                                <div className="w-[85%] h-full p-10 flex flex-col gap-10 ">
+                                    {edit_data.map((items) => (
+                                        <div key={items.id} className="flex flex-col gap-2">
+                                            <p className="py-0.5 px-2 border border-purple-200 bg-purple-100 text-center text-sm text-purple-600 w-12 rounded-md">{items.time}</p>
+                                            <p className="text-lg font-normal text-gray-600">{items.label}</p>
+                                        </div>
+                                    ))}
+                                </div>
+
                             </div>
                         </div>
-                        <div className="flex w-full h-[83.5%] z-11">
-                            <div className="border-r border-purple-100 w-[15%] h-full rounded-bl-4xl">
-
-                            </div>
-                            <div className="w-[85%] h-full p-10 flex flex-col gap-10 ">
-                                {edit_data.map((items)=>(
-                                    <div key={items.id} className="flex flex-col gap-2">
-                                        <p className="py-0.5 px-2 border border-purple-200 bg-purple-100 text-center text-sm text-purple-600 w-12 rounded-md">{items.time}</p>
-                                        <p className="text-lg font-normal text-gray-600">{items.label}</p>
-                                    </div>
-                                ))}
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
+                    </motion.div>
+                </AnimatePresence>
                 <div>
                     <div className="w-full flex justify-center gap-10">
-                        {bottom_text.map((items)=>(
-                            <p key={items.id} className="text-2xl font-normal text-gray-300 hover:text-gray-400 transition-all duration-500 cursor-default">{items.label}</p>
+                        {bottom_text.map((items) => (
+                            <p key={items.id} className="text-2xl font-normal text-gray-800 hover:text-gray-400 transition-all duration-500 cursor-default">{items.label}</p>
                         ))}
                     </div>
                 </div>
