@@ -33,12 +33,20 @@ export const useDownloadFile = (filename: string, videoName: string) => {
     };
 
 
+
     const DownloadPDF = async () => {
         setLoading(true);
 
-        const response = await axios.get(`http://localhost:8000/download/pdf/${filename}/${videoName}`,
+        if (!videoName){
+            console.log("videoname not available")
+            return
+        }
+
+        const response = await axios.get(`http://localhost:8000/download/pdf/${filename}`,
             { responseType: "blob" }
         );
+
+
 
         const url = window.URL.createObjectURL(response.data);
         const link = document.createElement("a");
@@ -53,5 +61,5 @@ export const useDownloadFile = (filename: string, videoName: string) => {
     }
 
 
-    return { DownloadSRT,DownloadPDF, loadingsrt };
+    return { DownloadSRT, DownloadPDF, loadingsrt };
 };

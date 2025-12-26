@@ -2,12 +2,12 @@ from pathlib import Path
 from src.postprocessing.pdf_generator import Generate_pdf
 
 
-def srt_to_text(srt_filepath, filename, videoName):
+def srt_to_text(srt_filepath, filename):
 
     srt_filepath = str(srt_filepath)
 
-    txt_dir = Path("txt")
-    pdf_dir = Path("pdf")
+    txt_dir = Path("TXT")
+    pdf_dir = Path("PDFs")
     txt_dir.mkdir(parents=True, exist_ok=True)
     pdf_dir.mkdir(parents=True, exist_ok=True)
 
@@ -19,11 +19,11 @@ def srt_to_text(srt_filepath, filename, videoName):
     with open(srt_filepath, "r", encoding="utf-8") as f_in:
         for line in f_in:
             line = line.strip()
-
+            
             if not line or line.isdigit() or "-->" in line:
-                continue
+                paragraph.append("/n")
 
-            paragraph.append(line)
+            paragraph.append(line )
 
     # Merge everything into a single paragraph
     full_paragraph = " ".join(paragraph)
@@ -37,7 +37,7 @@ def srt_to_text(srt_filepath, filename, videoName):
 
     # Generate PDF using your existing function
     try:
-        Generate_pdf(str(output_txt), str(pdf_path), videoName)
+        Generate_pdf(str(output_txt), str(pdf_path))
     except Exception as e:
         raise RuntimeError(f"PDF generation failed: {e}") from e
 

@@ -3,3 +3,7 @@
 *srt
 *audio
 *node_modules
+*Test
+*TXT
+*PDFs
+*__pycache__

@@ -1,5 +1,3 @@
-# src/postprocessing/srt_generator.py
-
 from pathlib import Path
 from typing import Iterable, Dict, Any
 import math
@@ -17,9 +15,7 @@ def format_timestamp(seconds: float) -> str:
     hrs = total_seconds // 3600
     return f"{hrs:02}:{mins:02}:{secs:02},{ms:03}"
 
-
-max_duration = 3.0
-
+max_words = 6
 
 def Split_Segments(segment):
     start = segment["start"]
@@ -29,20 +25,42 @@ def Split_Segments(segment):
     words = text.split()
     duration = end - start
 
-    if duration <= max_duration:
+    if len(words) <= max_words:
         return [(start, end, text)]
 
-    chunk_count = math.ceil(duration / max_duration)
-    words_per_chunk = math.ceil(len(words) / chunk_count)
+    chunks = [
+        " ".join(words[i : i + max_words]) for i in range(0, len(words), max_words)
+    ]
+
+    total_chars = sum(len(c) for c in chunks)
 
     subtitles = []
 
-    for i in range(chunk_count):
-        chunk_start = start + i * max_duration
-        chunk_end = min(start + (i + 1) * max_duration, end)
+    current_time = start
 
-        chunk_words = words[i * words_per_chunk : (i + 1) * words_per_chunk]
-        chunk_text = " ".join(chunk_words)
+    for chunk in chunks:
+        chunk_chars = len(chunk)
+        propostional_duration = duration * (chunk_chars / total_chars)
+
+        chunk_start = current_time
+        chunk_end = current_time + propostional_duration
+
+        subtitles.append((chunk_start, chunk_end, chunk))
+        current_time = chunk_end
+
+    return subtitles
+
+
+def split_with_word_timestamp(segments, max_words=6):
+    words = segments.get("words", [])
+    subtitles = []
+
+    for i in range(0, len(words), max_words):
+        chunk = words[i : i + max_words]
+
+        chunk_text = " ".join(w["text"] for w in chunk)
+        chunk_start = chunk[0]["start"]
+        chunk_end = chunk[-1]["end"]
 
         subtitles.append((chunk_start, chunk_end, chunk_text))
 
@@ -51,15 +69,15 @@ def Split_Segments(segment):
 
 def save_srt(segments, filepath):
     counter = 1
-
     with open(filepath, "w", encoding="utf-8") as f:
         for seg in segments:
-            split_segs = Split_Segments(seg)
+            if "words" in seg:
+                split_segs = split_with_word_timestamp(seg)
+            else:
+                split_segs = Split_Segments(seg)
 
             for start, end, text in split_segs:
                 f.write(f"{counter}\n")
                 f.write(f"{format_timestamp(start)} --> {format_timestamp(end)} \n")
                 f.write(f"{text}" + "\n\n")
                 counter += 1
-
-                

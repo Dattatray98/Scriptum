@@ -28,8 +28,8 @@ const Navbar: React.FC<any> = ({ LoginOpen }) => {
 
   return (
     <nav
-      className={`z-50 backdrop-blur-3xl border-gray-50 flex justify-between items-center px-4 transition-all duration-500 ${IsScroll
-          ? "fixed top-0 w-full h-18 border-b"
+      className={`z-50 backdrop-blur-3xl border-gray-500 flex justify-between items-center px-4 transition-all duration-500 ${IsScroll
+          ? "fixed top-0 w-full h-18 border-b border-gray-700"
           : "absolute top-10 h-15 w-[90%] border shadow-[0_20px_60px_rgba(0,0,0,0.12),0_8px_24px_rgba(0,0,0,0.08)] rounded-3xl"
         }`}
     >
