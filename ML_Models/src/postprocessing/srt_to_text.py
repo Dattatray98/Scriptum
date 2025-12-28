@@ -19,11 +19,12 @@ def srt_to_text(srt_filepath, filename):
     with open(srt_filepath, "r", encoding="utf-8") as f_in:
         for line in f_in:
             line = line.strip()
+            complete_line = "/n" + line
             
-            if not line or line.isdigit() or "-->" in line:
-                paragraph.append("/n")
+            # if not line or line.isdigit() or "-->" in line:
+            #     paragraph.append("/n")
 
-            paragraph.append(line )
+            paragraph.append(complete_line)
 
     # Merge everything into a single paragraph
     full_paragraph = " ".join(paragraph)

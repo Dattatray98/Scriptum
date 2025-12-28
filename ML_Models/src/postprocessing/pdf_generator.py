@@ -62,9 +62,10 @@ def Generate_pdf(text_file, output_path):
     Story.append(Spacer(1, 15))
 
     Story.append(Paragraph("Transcript", section_title_style))
+    Story.append(Paragraph(text.replace("/n", "<br/>"),  content_style))
 
-    for line in text.split("\n"):
-        Story.append(Paragraph(line, content_style))
-        Story.append(Spacer(1, 12))
+    # for line in text.split("/n"):
+    #     Story.append(Paragraph(line, content_style))
+    #     Story.append(Spacer(1, 10))
 
     doc.build(Story)
