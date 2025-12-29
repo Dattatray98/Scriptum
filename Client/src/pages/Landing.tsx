@@ -69,13 +69,14 @@ const Landing = () => {
                     )}
                 </AnimatePresence>
 
-                <div className="absolute top-0 left-0 w-[350px] h-[350px] bg-pink-300 rounded-full blur-[140px] opacity-30"></div>
-                <div className="absolute top-3 left-[35vh] w-[450px] h-[450px] bg-blue-900 blur-[150px] rounded-full  opacity-40"></div>
+                <div className="absolute top-0 left-0 w-[350px] h-[350px] bg-pink-200 rounded-full blur-[140px] opacity-30"></div>
+                <div className="absolute top-3 left-[35vh] w-[450px] h-[450px] bg-blue-300 blur-[250px] rounded-full  opacity-40"></div>
+
                 <div className="flex items-center h-full z-11 relative">
                     <div className="h-full w-[60%] flex flex-col justify-center pl-[8vh]">
                         <div className="w-58 z-10 bg-transparent rounded-3xl border border-purple-200 shadow-sm px-3 py-1.5 flex items-center gap-2 mb-10">
                             <WiStars className="text-purple-300 h-7 w-7 animate-pulse" />
-                            <button className=" bg-linear-to-br bg-clip-text text-transparent from-purple-300 via-blue-100 to-blue-300 font-medium">Powered by NeuroEon</button>
+                            <button className=" bg-linear-to-br bg-clip-text text-transparent from-purple-200 via-blue-100 to-blue-400 font-medium">Powered by NeuroEon</button>
                         </div>
                         <Flowtingparticals />
                         <div className="flex flex-col gap-3 z-11">
@@ -95,7 +96,7 @@ const Landing = () => {
                                     </AnimatePresence>
                                 </motion.div>
                             </h1>
-                            <div className="text-shadow-2xs text-6xl text-white mt-3 font-normal flex h-20 gap-3 z-11">with<h1 className="bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">ScripTum</h1></div>
+                            <div className="text-shadow-2xs text-6xl text-white mt-3 font-normal flex h-20 gap-3 z-11">with<h1 className="bg-linear-to-r from-cyan-700 via-cyan-600 to-cyan-500 bg-clip-text text-transparent">ScripTum</h1></div>
                             <p className="text-shadow-2xs text-lg text-gray-300 font-medium mt-2">Turn your audio and video into clear, reliable text in seconds — with ScripTum.</p>
                         </div>
 
@@ -158,7 +159,7 @@ const Landing = () => {
                         whileInView={{ scale: 1 }}
                         transition={{ duration: 0.4, ease: "easeInOut" }}
                         className="w-[49.5%] flex flex-col items-center justify-center">
-                        <h1 className="text-6xl text-center flex gap-3 text-gray-300">The Transcript Editor <p className="bg-linear-to-r from-indigo-500 via-indigo-400 to-blue-300 bg-clip-text text-transparent">You'll Love</p></h1>
+                        <h1 className="text-6xl text-center flex gap-3 text-gray-300">The Transcript Editor <p className="bg-linear-to-r from-indigo-400 via-cyan-300 to-blue-100 bg-clip-text text-transparent">You'll Love</p></h1>
                         <p className="text-2xl text-center text-gray-500 mt-3">A beautiful, intuitive interface designed for professionals who demand precision.</p>
                     </motion.div>
                     <AnimatePresence>
@@ -185,7 +186,7 @@ const Landing = () => {
                                     </div>
                                     <div className="flex gap-5">
                                         <button className="py-2 px-5 border border-gray-600 text-white shadow-sm rounded-md">Share</button>
-                                        <button className="py-2 px-5 shadow-sm rounded-md bg-purple-400 text-white">Export</button>
+                                        <button className="py-2 px-5 shadow-sm rounded-md bg-[#0D7281] text-white">Export</button>
                                     </div>
                                 </div>
                                 <div className="flex w-full h-[83.5%] z-11">
