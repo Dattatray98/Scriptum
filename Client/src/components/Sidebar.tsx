@@ -54,7 +54,7 @@ const Sidebar: React.FC<any> = ({ IsSidebarOpen, handleSidebar, handletranscribe
     }
 
     return (
-        <div className={`z-50 h-full flex flex-col gap-5 border  bg-white border-white/10 shadow-sm rounded-xl transition-all duration-1000 ${IsSidebarOpen === false ? "p-2.5 w-[60px]" : "w-[25%] p-3 "}`}>
+        <div className={`z-50 h-full flex flex-col gap-5 bg-white  shadow-sm transition-all duration-500 ${IsSidebarOpen === false ? "p-2.5 w-[60px] rounded-l-xl border border-white/20 border-r-gray-300" : "w-[25%] p-3 rounded-xl border-white/10 border"}`}>
             <div className="flex justify-between border-b border-gray-200 pb-3">
                 <div className={`transition-all flex gap-2 items-center ${IsSidebarOpen ? "flex" : "hidden"}`}>
                     <PiBrain className="text-[#016b7b] text-3xl mt-1" />
@@ -91,7 +91,7 @@ const Sidebar: React.FC<any> = ({ IsSidebarOpen, handleSidebar, handletranscribe
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: OpenHistory ? "auto" : 0, opacity: OpenHistory ? 1 : 0 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.2, ease: "easeInOut" }}
+                        transition={{ duration: 0.5, ease: "easeInOut" }}
                         className={` overflow-hidden py-3 flex flex-col gap-2 items-start`}
                     >
                         {history.map((item) => (

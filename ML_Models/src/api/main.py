@@ -65,7 +65,7 @@ async def scriptum(file: UploadFile = File(...)):
         "filename": safe_name,  # return clean name to frontend
         "srt_file": f"{safe_name}.srt",
         "srt_url": f"/download/{safe_name}.srt",
-        "result": result["text"],
+        "result": segments,
     }
 
 

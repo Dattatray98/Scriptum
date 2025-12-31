@@ -2,11 +2,15 @@ import axios from "axios";
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 
-export const useFetchTranscript = (file: File | null) => {
+export const useFetchTranscript = (file: File | null,) => {
     const [Loading, setLoading] = useState<boolean>(false);
-    const [Transcript, setTranscript] = useState("");
+    const [Transcript, setTranscript] = useState<[
+        { id: number, start: number, end: number, text: string }
+    ]>();
     const [srtFile, setSrtFile] = useState("");
     const navigate = useNavigate();
+    const [videoName, setVideoName] = useState<any>()
+
 
     const transcriptfetching = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -24,34 +28,38 @@ export const useFetchTranscript = (file: File | null) => {
             .replace(/\s+/g, "_")                // replace spaces with underscore
             .slice(0, 50);
 
-        console.log(clean_videoName);
+        setVideoName(clean_videoName)
 
         try {
             setLoading(true);
-            const response = await axios.post(`${import.meta.env.VITE_SCRIPTUM_ROUTE}`,
-                formData,
+            const response = await axios.post(`http://localhost:5000/api/transcribe`, formData,
                 {
                     headers: { "Content-Type": "multipart/form-data" },
                 }
             );
 
             setTranscript(response.data.result);
-            setSrtFile(response.data.srt_file)
+            setSrtFile(response.data.srt_file);
+            console.log(response.data.result);
 
-            console.log(response.data.srt_file)
-            navigate("/transcript", {
+
+            navigate("/workspace", {
                 state: {
                     text: response.data.result,
                     srtFile: response.data.srt_file,
                     videoName: clean_videoName
                 }
             })
+
+            return videoName;
         } catch (error) {
             console.log(error);
         } finally {
             setLoading(false);
         }
+
+        return videoName
     }
 
-    return { Transcript, Loading, srtFile, transcriptfetching };
+    return { Transcript, Loading, srtFile, transcriptfetching, videoName };
 };

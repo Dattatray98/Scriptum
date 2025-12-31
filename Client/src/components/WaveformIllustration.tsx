@@ -41,7 +41,7 @@ const WaveformIllustration : React.FC<any> = ({IsSignUP}) => {
             {heights.map((h, i) => (
               <div
                 key={i}
-                className="w-[3px] rounded-full bg-gradient-to-t from-[#8A2FFF] to-[#4C6FFF]"
+                className="w-[3px] rounded-full bg-linear-to-t from-[#8A2FFF] to-[#4C6FFF]"
                 style={{
                   height: `${h}%`,
                   animation: "waveform 2.5s ease-in-out infinite",
@@ -56,18 +56,18 @@ const WaveformIllustration : React.FC<any> = ({IsSignUP}) => {
           {/* Welcome Text */}
           <div className="flex flex-col gap-2 pb-5">
             <div className="flex gap-2">
-              <h1 className="text-4xl">Welcome to</h1>
-              <h1 className="text-4xl bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <h1 className="text-4xl text-white">Welcome to</h1>
+              <h1 className="text-4xl bg-linear-to-r from-cyan-700 via-cyan-600 to-cyan-500 bg-clip-text text-transparent">
                 ScripTum !
               </h1>
             </div>
-            <p className="text-center"> {IsSignUP === false ? "Sign in to continue your transcription workspace." : "Sign Up to Start Your journey."}</p>
+            <p className="text-center text-gray-300"> {IsSignUP === false ? "Sign in to continue your transcription workspace." : "Sign Up to Start Your journey."}</p>
           </div>
 
           {/* Text Lines Placeholder */}
           <div className="space-y-2.5 px-8 pt-2">
             <div
-              className="h-[7px] rounded-full bg-gradient-to-r from-[#8A2FFF]/35 to-[#4C6FFF]/35 animate-shimmer"
+              className="h-[7px] rounded-full bg-linear-to-r from-[#8A2FFF]/35 to-[#4C6FFF]/35 animate-shimmer"
               style={{
                 width: "100%",
                 animationDelay: "0s",
@@ -75,7 +75,7 @@ const WaveformIllustration : React.FC<any> = ({IsSignUP}) => {
               }}
             />
             <div
-              className="h-[7px] rounded-full bg-gradient-to-r from-[#8A2FFF]/30 to-[#4C6FFF]/30 animate-shimmer"
+              className="h-[7px] rounded-full bg-linear-to-r from-[#8A2FFF]/30 to-[#4C6FFF]/30 animate-shimmer"
               style={{
                 width: "88%",
                 animationDelay: "0.3s",
@@ -83,7 +83,7 @@ const WaveformIllustration : React.FC<any> = ({IsSignUP}) => {
               }}
             />
             <div
-              className="h-[7px] rounded-full bg-gradient-to-r from-[#8A2FFF]/28 to-[#4C6FFF]/28 animate-shimmer"
+              className="h-[7px] rounded-full bg-linear-to-r from-[#8A2FFF]/28 to-[#4C6FFF]/28 animate-shimmer"
               style={{
                 width: "75%",
                 animationDelay: "0.6s",
@@ -91,7 +91,7 @@ const WaveformIllustration : React.FC<any> = ({IsSignUP}) => {
               }}
             />
             <div
-              className="h-[7px] rounded-full bg-gradient-to-r from-[#8A2FFF]/25 to-[#4C6FFF]/25 animate-shimmer"
+              className="h-[7px] rounded-full bg-linear-to-r from-[#8A2FFF]/25 to-[#4C6FFF]/25 animate-shimmer"
               style={{
                 width: "92%",
                 animationDelay: "0.9s",
@@ -103,30 +103,24 @@ const WaveformIllustration : React.FC<any> = ({IsSignUP}) => {
 
         {/* Caption Card */}
         <div
-          className="text-center px-6 py-4 rounded-2xl backdrop-blur-xl mx-4 mt-8"
-          style={{
-            background: "linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.3))",
-            border: "1px solid rgba(255,255,255,0.4)",
-            boxShadow:
-              "0 8px 32px rgba(138,46,255,0.12), inset 0 1px 0 rgba(255,255,255,0.6)"
-          }}
+          className="text-center px-6 py-4 rounded-2xl backdrop-blur-xl mx-4 mt-8 bg-white/40"
         >
-          <p className="text-gray-700 leading-relaxed text-[13.5px]">
+          <p className="text-gray-900 font-medium leading-relaxed text-sm">
             AI-powered transcription that turns your audio into structured, accurate text.
           </p>
         </div>
 
         {/* Floating Accent Dots */}
         <div
-          className="absolute top-6 right-8 w-2 h-2 rounded-full bg-gradient-to-br from-[#8A2FFF] to-[#4C6FFF] opacity-50 animate-float-slow"
+          className="absolute top-6 right-8 w-2 h-2 rounded-full bg-linear-to-br from-[#8A2FFF] to-[#4C6FFF] opacity-50 animate-float-slow"
           style={{ boxShadow: "0 0 12px rgba(138,47,255,0.5)" }}
         />
         <div
-          className="absolute top-2 right-16 w-1.5 h-1.5 rounded-full bg-gradient-to-br from-[#4C6FFF] to-[#8A2FFF] opacity-35 animate-float-slower"
+          className="absolute top-2 right-16 w-1.5 h-1.5 rounded-full bg-linear-to-br from-[#4C6FFF] to-[#8A2FFF] opacity-35 animate-float-slower"
           style={{ boxShadow: "0 0 8px rgba(75,112,255,0.4)" }}
         />
         <div
-          className="absolute top-8 left-6 w-2 h-2 rounded-full bg-gradient-to-br from-[#8A2FFF] to-[#4C6FFF] opacity-45 animate-float-slow"
+          className="absolute top-8 left-6 w-2 h-2 rounded-full bg-linear-to-br from-[#8A2FFF] to-[#4C6FFF] opacity-45 animate-float-slow"
           style={{
             animationDelay: "1s",
             boxShadow: "0 0 10px rgba(138,47,255,0.5)"

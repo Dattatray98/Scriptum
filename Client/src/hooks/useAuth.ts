@@ -29,7 +29,7 @@ export const useAuth = () => {
 
             localStorage.setItem("token", JSON.stringify(response.data.token))
 
-            navigate("/scriptum")
+            navigate("/workspace")
         } catch (error) { }
     }
 
