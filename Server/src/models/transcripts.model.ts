@@ -1,5 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-import User from "./userAuth.model";
 
 const TranscriptSegmentSchema = new Schema(
     {
@@ -12,9 +11,9 @@ const TranscriptSegmentSchema = new Schema(
 
 const TranscriptVersionSchema = new Schema(
     {
-        version: { type: Number, required: true },
+        version: { type: Number},
         is_current: { type: Boolean, default: false },
-        transcript: { type: [TranscriptSegmentSchema], required: true },
+        transcript: { type: [TranscriptSegmentSchema]},
     },
     { timestamps: true }
 );
@@ -23,11 +22,9 @@ const TranscriptSchema = new Schema(
     {
         user_id: {
             type: mongoose.Types.ObjectId,
-            ref: User,
             required: true,
             index: true,
-        },
-
+        }, 
         title: { type: String, required: true },
 
         original_transcript: {

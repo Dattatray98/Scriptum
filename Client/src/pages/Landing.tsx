@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { WiStars } from "react-icons/wi";
 import Flowtingparticals from "../components/Flowtingparticals";
 import SignUp from "../components/Auth/SignUp";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 
 const card_data = [
@@ -37,6 +39,8 @@ const bottom_text = [
 const Landing = () => {
     const [count, setCount] = useState(0);
     const [LoginOpen, setLoginOpen] = useState<boolean>(false);
+    const navigate = useNavigate();
+    const auth = useContext(AuthContext);
 
     const words = ["Faster", "Accurate", "Automatic"];
     useEffect(() => {
@@ -46,6 +50,14 @@ const Landing = () => {
 
         return () => clearInterval(interval);
     }, []);
+
+    const OpenLoginWindow = () => {
+        if (auth?.user) {
+            navigate('/workspace')
+        } else {
+            setLoginOpen(true);
+        }
+    }
 
 
     useEffect(() => {
@@ -61,7 +73,7 @@ const Landing = () => {
             {/* <div className="bg-[url('/transcriptbg.jpg')] bg-cover h-screen "> */}
             <div className="bg-black h-screen ">
                 <div className="w-full flex justify-center">
-                    <Navbar LoginOpen={LoginOpen} />
+                    <Navbar LoginOpen={LoginOpen} OpenLoginWindow={OpenLoginWindow} />
                 </div>
                 <AnimatePresence>
                     {LoginOpen && (
@@ -101,7 +113,7 @@ const Landing = () => {
                         </div>
 
                         <div className=" flex gap-5 mt-15 z-11">
-                            <button className="py-3 px-[8vh] font-medium text-lg text-black rounded-xl shadow-md bg-white cursor-pointer hover:scale-[0.90] transition-all duration-500 " onClick={() => setLoginOpen(!LoginOpen)}>Get Started</button>
+                            <button className="py-3 px-[8vh] font-medium text-lg text-black rounded-xl shadow-md bg-white cursor-pointer hover:scale-[0.90] transition-all duration-500 " onClick={OpenLoginWindow}>Get Started</button>
 
                             <button className="py-3 px-[8vh] font-medium text-lg text-white rounded-xl shadow-md border border-white cursor-pointer hover:scale-[0.90] transition-all duration-500">Learn More</button>
                         </div>

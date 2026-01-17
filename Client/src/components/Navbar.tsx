@@ -12,7 +12,7 @@ const navabaritem = [
 
 
 
-const Navbar: React.FC<any> = ({ LoginOpen }) => {
+const Navbar: React.FC<any> = ({ LoginOpen, OpenLoginWindow }) => {
   const [IsScroll, setIsScroll] = useState(false);
   const Auth = useContext(AuthContext);
   const navigate = useNavigate();
@@ -57,14 +57,14 @@ const Navbar: React.FC<any> = ({ LoginOpen }) => {
         {!Auth?.user ? (
           <button
             className="px-5 py-2 border border-gray-200 shadow-sm rounded-xl font-medium bg-white cursor-pointer hover:scale-95 transition-all duration-300"
-            onClick={LoginOpen}
+            onClick={OpenLoginWindow}
           >
             Start Free Trial
           </button>
         ) : (
           <div className="flex items-center gap-3">
             {/* optional: show user name or avatar */}
-            <div className="text-sm text-gray-700">{Auth.user?.email ?? "User"}</div>
+            <div className="text-sm text-gray-200">{Auth.user?.email ?? "User"}</div>
             <button
               className="px-4 py-2 border border-gray-200 shadow-sm rounded-xl font-medium bg-white cursor-pointer hover:scale-95 transition-all duration-300"
               onClick={handleLogout}

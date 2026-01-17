@@ -28,8 +28,6 @@ export const Transcribe = async (file: Express.Multer.File) => {
                 headers: formData.getHeaders(),
             }
         );
-
-        console.log(response.data.result);
         return response.data.result;
 
     } catch (error) {

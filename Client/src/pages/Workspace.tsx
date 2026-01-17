@@ -3,17 +3,21 @@ import Sidebar from "../components/Sidebar"
 import { useState } from "react";
 import { useFetchTranscript } from "../hooks/useFetchTranscript";
 import { useDownloadFile } from "../hooks/useDownloadFile";
-import ContentTab from "../components/contentTab";
+import ContentTab from "../components/ContentTab";
+import ProfileWindow from "../components/ProfileWindow";
+import { useTransChat } from "../hooks/useFetchChatHistory";
+import type { TranscriptDataTypes } from "../types/transcript.types";
 
 const Workspace = () => {
 
   const [IsSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [NewTranscribeTab, setNewTranscribeTab] = useState<boolean>(true);
-  const [Historycontent, setHistorycontent] = useState<{ id: number, content: [] }>();
   const [File, setFile] = useState<File | null>(null);
-  const { Loading, transcriptfetching, Transcript, srtFile, videoName } = useFetchTranscript(File);
+  const [historyContent, setHistorycontent] = useState<TranscriptDataTypes>();
+  const { Loading, transcriptfetching, srtFile, videoName } = useFetchTranscript(File);
   const { DownloadSRT } = useDownloadFile(srtFile, videoName);
-
+  const [OpenProfile, setOpenProfile] = useState<boolean>(false);
+  const { transChats } = useTransChat();
   const handleSidebar = () => {
     setIsSidebarOpen(!IsSidebarOpen);
   }
@@ -26,25 +30,32 @@ const Workspace = () => {
     setFile(e.target.files?.[0] || null);
   }
 
+  const profileOpen = () => {
+    setOpenProfile(!OpenProfile)
+  }
+
+  const closeProfile = () => {
+    setOpenProfile(false);
+  }
 
   return (
     <div className={`h-screen flex p-2 bg-gray-200 ${IsSidebarOpen ? "gap-2" : ""}`}>
-      <Sidebar IsSidebarOpen={IsSidebarOpen} handleSidebar={handleSidebar} handletranscribeTab={handletranscribeTab} setHistorycontent={setHistorycontent} NewTranscribeTab={NewTranscribeTab} />
+      <Sidebar IsSidebarOpen={IsSidebarOpen} handleSidebar={handleSidebar} handletranscribeTab={handletranscribeTab} NewTranscribeTab={NewTranscribeTab} profileOpen={profileOpen} closeProfile={closeProfile} transChats={transChats ?? []} setHistorycontent={setHistorycontent} />
 
       <div className=" border absolute top-10 left-10 w-[400px] h-[400px] bg-purple-400 rounded-full blur-[180px] opacity-40 z-0"></div>
       <div className="absolute bottom-0 right-0 w-[450px] h-[450px] blur-[200px] bg-blue-500  rounded-full  opacity-40"></div>
 
-      <div className={`w-full  border-white/20 shadow-sm bg-white z-50 transition-all duration-500 ${IsSidebarOpen ? "rounded-xl border" : " border-l-0 rounded-r-xl "} `}>
+      <div className={`w-full relative border-white/20 shadow-sm bg-white z-50 transition-all duration-500 ${IsSidebarOpen ? "rounded-xl border" : " border-l-0 rounded-r-xl "} `}>
         {NewTranscribeTab === true ? (
           <div className=" w-full h-full flex items-center justify-center">
             <div className="flex flex-col  gap-10 justify-center items-start w-[55%] h-full px-8">
 
-              <div className="w-58 z-10 bg-transparent rounded-3xl border border-purple-200 shadow-sm px-3 py-1.5 flex items-center gap-2 ">
+              <div className="w-58 bg-transparent rounded-3xl border border-purple-200 shadow-sm px-3 py-1.5 flex items-center gap-2 ">
                 <WiStars className="text-blue-500 h-7 w-7 animate-pulse" />
                 <button className=" bg-linear-to-br bg-clip-text text-transparent from-blue-500 via-blue-500 to-cyan-400 font-medium">Powered by NeuroEon</button>
               </div>
 
-              <div className="text-6xl lg:text-7xl z-10 tracking-tight leading-tight space-x-2 flex flex-col gap-3">
+              <div className="text-6xl lg:text-7xl tracking-tight leading-tight space-x-2 flex flex-col gap-3">
                 <h1 >Your Voice, Perfectly </h1>
                 <h1 className="bg-linear-to-r bg-clip-text text-transparent from-cyan-600 via-blue-400 to-cyan-300">Transcribed</h1>
                 <div className="flex items-center gap-6">
@@ -95,11 +106,16 @@ const Workspace = () => {
           </div>
 
         ) : (
-          <ContentTab Transcript={Transcript} videoName={videoName} DownloadSRT={DownloadSRT} />
+          <ContentTab historyContent={historyContent?.original_transcript ?? []}videoName={videoName} DownloadSRT={DownloadSRT} />
+        )}
+
+        {OpenProfile && (
+          <div className="h-full w-full absolute top-0 flex justify-center items-center backdrop-blur-md">
+            <ProfileWindow closeProfile={closeProfile} />
+          </div>
         )}
 
       </div>
-
     </div>
   )
 }

@@ -81,7 +81,8 @@ export const UserProfile = async (req: Request, res: Response) => {
         res.status(200).json({
             user: user
         })
+        
     } catch (error) {
-
+        console.log(error);
     }
 } 

@@ -1,0 +1,1 @@
+GET http://localhost:5000/api/get/transcript?trans_id=696b2c68e9608f5f974dd444

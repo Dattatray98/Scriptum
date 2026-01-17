@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
+import { useAxios } from "./useAxios";
 
 export const useFetchTranscript = (file: File | null,) => {
     const [Loading, setLoading] = useState<boolean>(false);
@@ -30,18 +30,28 @@ export const useFetchTranscript = (file: File | null,) => {
 
         setVideoName(clean_videoName)
 
+        const token = localStorage.getItem("token")
+        if (!token) {
+            console.log("user is not authenticated")
+        }
+
+        formData.append("filename", clean_videoName)
+        const api = useAxios();
+
         try {
             setLoading(true);
-            const response = await axios.post(`http://localhost:5000/api/transcribe`, formData,
+            const response = await api.post(`/transcribe`, formData,
                 {
-                    headers: { "Content-Type": "multipart/form-data" },
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        Authorization: token ? `Bearer ${token}` : "",
+                    }
                 }
             );
 
             setTranscript(response.data.result);
             setSrtFile(response.data.srt_file);
             console.log(response.data.result);
-
 
             navigate("/workspace", {
                 state: {

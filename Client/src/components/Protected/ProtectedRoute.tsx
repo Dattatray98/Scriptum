@@ -1,27 +1,24 @@
 // src/components/ProtectedRoute.tsx
-import React, { useContext } from "react";
-import { Navigate } from "react-router-dom";
+import { useContext } from "react";
+import { Navigate, Outlet } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import type { JSX } from "react/jsx-runtime";
 
-const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
+const ProtectedRoute = () => {
     const auth = useContext(AuthContext);
 
-    // If context is not ready, block until it is (safer than assuming a value)
-    if (!auth) return <Navigate to="/" replace />;
+    if (!auth) return null;
 
-    // While we check auth status, show a loader (avoids flicker)
-    if (auth.loading) {
+    const { user, loading } = auth;
+
+    if (loading) {
         return <div className="flex items-center justify-center">Loading...</div>;
     }
 
-    // If user is not logged in, redirect to landing page (where your login popup lives)
-    if (!auth.user) {
+    if (!user) {
         return <Navigate to="/" replace />;
     }
 
-    // Authenticated → allow access
-    return children;
+    return <Outlet />;
 };
 
 export default ProtectedRoute;

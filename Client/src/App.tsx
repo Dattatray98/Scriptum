@@ -2,20 +2,23 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Scriptum from "./pages/Home";
 import TranscriptPage from "./pages/TranscriptPage";
-import ProtectedRouteLayout from "./components/Protected/ProtectedRouteLayout";
 import Workspace from "./pages/Workspace";
+import ProtectedRoute from "./components/Protected/ProtectedRoute";
+import { AuthProvider } from "./context/AuthContext";
 
 const App = () => {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/scriptum" element={<Scriptum />} />
-        <Route path="/workspace" element={<Workspace />} />
-        <Route path="/transcript" element={<TranscriptPage />} />
-        <Route element={<ProtectedRouteLayout />}>
-        </Route>
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/scriptum" element={<Scriptum />} />
+          <Route path="/transcript" element={<TranscriptPage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/workspace" element={<Workspace />} />
+          </Route>
+        </Routes>
+      </AuthProvider>
     </Router>
   )
 }

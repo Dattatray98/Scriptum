@@ -11,25 +11,28 @@ interface AuthContextType {
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<any> = ({ children }) => {
-  const [user, setUser] = useState<any | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const api = useAxios();
+  const [user, setUser] = useState<any | null>(null);   // it has user state
+  const [loading, setLoading] = useState<boolean>(true);  // it has loading state
+  const api = useAxios();  // backend initial api
+
 
   useEffect(() => {
     const handleProfile = async () => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token");   // getting token from localStorage
 
-      if (!token) {
+      if (!token) {   // validating token
         setUser(null);
         setLoading(false);
         return;
       }
 
       try {
-        const response = await api.get("/auth/profile");
-        setUser(response.data.user);
+        const response = await api.get("/auth/profile");  // api response fetching 
+        setUser(response.data.user);   // setting the user 
+
       } catch (error) {
         console.log("Profile fetch error:", error);
+        localStorage.removeItem("token");
         setUser(null);
       } finally {
         setLoading(false);
