@@ -6,26 +6,35 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { FaPlus, FaRegUserCircle } from "react-icons/fa";
 import { GrHistory } from "react-icons/gr";
 import { useTransHistory } from "../hooks/useFetchChatHistory";
+import { HiOutlineDotsHorizontal } from "react-icons/hi";
+import { IoReturnUpForward } from "react-icons/io5";
+import { useDeleteChat } from "../hooks/useDeleteChat";
 
 const Sidebar: React.FC<any> = ({ IsSidebarOpen, handleSidebar, handletranscribeTab, setHistorycontent, transChats, NewTranscribeTab, profileOpen }) => {
     const [OpenHistory, setOpenHistory] = useState<boolean>(true);
-    const {FetchTransHistory} = useTransHistory()
+    const { FetchTransHistory } = useTransHistory();
+    const [chat_id, setChat_id] = useState<string | null>(null);
+    const [options, setOptions] = useState<boolean>(false);
+    const {DeleteChat} = useDeleteChat();
 
     const handleHistoryOpen = () => {
         setOpenHistory(!OpenHistory);
     }
 
-    const handlehistory = async (id: any) =>{
-        handletranscribeTab(false)
-        const data = await FetchTransHistory(id)
-        if(data){
-            setHistorycontent(data)
+    const handlehistory = async (id: any) => {
+        handletranscribeTab(false);
+        const data = await FetchTransHistory(id);
+        if (data) {
+            setHistorycontent(data);
         }
     }
 
+    const handleOptions = () => {
+        setOptions(!options);
+    }
 
     return (
-        <div className={`z-50 h-full flex flex-col gap-5 bg-white  shadow-sm transition-all duration-500 ${IsSidebarOpen === false ? "p-2.5 w-[60px] rounded-l-xl border border-white/20 border-r-gray-300" : "w-[20%] p-3 rounded-xl border-white/10 border"}`}>
+        <div className={`z-50 h-full flex flex-col gap-5 bg-white  shadow-sm transition-all duration-500 ${IsSidebarOpen === false ? "p-2.5 w-[60px] rounded-l-xl border border-white/20 border-r-gray-300" : "w-[320px] p-3 rounded-xl border-white/10 border"}`}>
             <div className="flex justify-between border-b border-gray-200 pb-3">
                 <div className={`transition-all flex gap-2 items-center ${IsSidebarOpen ? "flex" : "hidden"}`}>
                     <PiBrain className="text-[#016b7b] text-3xl mt-1" />
@@ -45,9 +54,10 @@ const Sidebar: React.FC<any> = ({ IsSidebarOpen, handleSidebar, handletranscribe
             </div>
 
             <div >
-                <button className={`p-2 w-full shadow-sm ${NewTranscribeTab === true ? " bg-blue-200" : "bg-gray-300"} rounded-xl cursor-pointer font-medium transition-all duration-500 flex items-center ${IsSidebarOpen ? "justify-center" : "justify-start"}`}
+                <button className={`p-2 w-full shadow-sm hover:bg-gray-300 ${NewTranscribeTab === true ? " bg-blue-200" : "border border-gray-200"} rounded-xl cursor-pointer font-medium transition-all duration-500 flex items-center ${IsSidebarOpen ? "justify-center" : "justify-start"}`}
                     onClick={() => {
                         handletranscribeTab(true);
+                        setChat_id(null)
                     }}
                 >{IsSidebarOpen ? "New Script" : <FaPlus className="h-6 w-6 transition-all" />}</button>
             </div>
@@ -67,9 +77,39 @@ const Sidebar: React.FC<any> = ({ IsSidebarOpen, handleSidebar, handletranscribe
                         {!transChats || transChats.length === 0 ? (
                             <p>No Transcripts yet</p>
                         ) : (
-                            <div className="flex flex-col gap-3 w-full">
+                            <div className="relative flex flex-col gap-3 w-full">
                                 {transChats.Chats.map((chat: any) => (
-                                    <button key={chat.trans_id} className={`border border-gray-200 shadow-sm rounded-xl py-2 px-3 font-medium text-sm truncate w-full text-start cursor-pointer transition-all duration-500 `} onClick={()=> handlehistory(chat.trans_id)}>{chat.title}</button>
+                                    <div className={`border group border-gray-200 shadow-sm rounded-xl py-2 px-3 font-medium text-sm w-full text-start cursor-pointer transition-all duration-500 ${chat_id === chat.trans_id ? "bg-blue-200" : "hover:bg-gray-300  "} `} >
+
+                                        {!options
+                                            ? (
+                                                <div className="w-full flex justify-between items-center">
+
+                                                    <p key={chat.trans_id}
+                                                        className={`truncate w-[88%] cursor-pointer `}
+                                                        onClick={() => {
+                                                            handlehistory(chat.trans_id);
+                                                            setChat_id(chat.trans_id);
+                                                        }}>
+
+                                                        {chat.title}
+
+                                                    </p>
+
+                                                    <HiOutlineDotsHorizontal className="text-2xl opacity-0 group-hover:opacity-100 transition-all duration-300" onClick={()=>DeleteChat(chat.trans_id)} />
+                                                </div>
+
+                                            ) : (
+
+                                                <div className="w-full flex justify-between" >
+                                                    <p className="">hello these are option for </p>
+                                                    <IoReturnUpForward
+                                                        className="h-5 w-5"
+                                                        onClick={handleOptions} />
+                                                </div>
+
+                                            )}
+                                    </div>
                                 ))}
                             </div>
                         )}

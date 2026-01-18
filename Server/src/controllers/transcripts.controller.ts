@@ -36,8 +36,6 @@ export const GenerateTranscript = [
                 transcript_versions: []
             });
 
-            console.log(transcript);
-
             res.status(200).json({
                 result: transcript
             });

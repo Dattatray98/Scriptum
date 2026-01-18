@@ -24,7 +24,7 @@ export const useTransChat = () => {
 
         }
         FetchTransChats()
-    }, [])
+    }, [transChats])
 
     return { transChats, loading, error }
 }

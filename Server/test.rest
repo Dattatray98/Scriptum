@@ -1,1 +1,1 @@
-GET http://localhost:5000/api/get/transcript?trans_id=696b2c68e9608f5f974dd444
+DELETE http://localhost:5000/api/delete/chat/696b4ed40ef633b404608167
