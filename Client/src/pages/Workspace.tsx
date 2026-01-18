@@ -7,40 +7,59 @@ import ContentTab from "../components/ContentTab";
 import ProfileWindow from "../components/ProfileWindow";
 import { useTransChat } from "../hooks/useFetchChatHistory";
 import type { TranscriptDataTypes } from "../types/transcript.types";
+import { useDeleteChat } from "../hooks/useDeleteChat";
+import WindowComponent from "../components/WindowComponent";
 
 const Workspace = () => {
 
+  // States
   const [IsSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [NewTranscribeTab, setNewTranscribeTab] = useState<boolean>(true);
   const [File, setFile] = useState<File | null>(null);
   const [historyContent, setHistorycontent] = useState<TranscriptDataTypes>();
+  const [OpenProfile, setOpenProfile] = useState<boolean>(false);
+  const [isWindow, setIsWindow] = useState<boolean>(false);
+  const [deleteChat, setDeleteChat] = useState<string | null>(null);
+
+
+  // Custom Hooks 
   const { Loading, transcriptfetching, srtFile, videoName } = useFetchTranscript(File);
   const { DownloadSRT } = useDownloadFile(srtFile, videoName);
-  const [OpenProfile, setOpenProfile] = useState<boolean>(false);
   const { transChats } = useTransChat();
+
+
+  // functions 
+
+  // Sidebar opening function
   const handleSidebar = () => {
     setIsSidebarOpen(!IsSidebarOpen);
   }
 
+  // transcription tab handling function
   const handletranscribeTab = (data: boolean) => {
     setNewTranscribeTab(data)
   }
 
+  // file handling function
   const handlefileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFile(e.target.files?.[0] || null);
   }
 
-  const profileOpen = () => {
-    setOpenProfile(!OpenProfile)
-  }
-
-  const closeProfile = () => {
-    setOpenProfile(false);
-  }
 
   return (
     <div className={`h-screen flex p-2 bg-gray-200 ${IsSidebarOpen ? "gap-2" : ""}`}>
-      <Sidebar IsSidebarOpen={IsSidebarOpen} handleSidebar={handleSidebar} handletranscribeTab={handletranscribeTab} NewTranscribeTab={NewTranscribeTab} profileOpen={profileOpen} closeProfile={closeProfile} transChats={transChats ?? []} setHistorycontent={setHistorycontent} />
+      <Sidebar
+        IsSidebarOpen={IsSidebarOpen}
+        handleSidebar={handleSidebar}
+        handletranscribeTab={handletranscribeTab}
+        NewTranscribeTab={NewTranscribeTab}
+        setIsWindow={setIsWindow}
+        setOpenProfile={setOpenProfile}
+        OpenProfile={OpenProfile}
+        transChats={transChats ?? []}
+        setHistorycontent={setHistorycontent}
+        setDeleteChat={setDeleteChat}
+      />
 
       <div className=" border absolute top-10 left-10 w-[400px] h-[400px] bg-purple-400 rounded-full blur-[180px] opacity-40 z-0"></div>
       <div className="absolute bottom-0 right-0 w-[450px] h-[450px] blur-[200px] bg-blue-500  rounded-full  opacity-40"></div>
@@ -106,12 +125,19 @@ const Workspace = () => {
           </div>
 
         ) : (
-          <ContentTab historyContent={historyContent?.original_transcript ?? []}videoName={videoName} DownloadSRT={DownloadSRT} />
+          <ContentTab historyContent={historyContent?.original_transcript ?? []} contentdata={historyContent} videoName={videoName} DownloadSRT={DownloadSRT} />
         )}
 
-        {OpenProfile && (
-          <div className="h-full w-full absolute top-0 flex justify-center items-center backdrop-blur-md">
-            <ProfileWindow closeProfile={closeProfile} />
+        {isWindow && (
+          <div className="h-full w-full absolute top-0 flex justify-center rounded-xl items-center backdrop-blur-md">
+            <WindowComponent
+              deleteChat={deleteChat}
+              setIsWindow={setIsWindow}
+              handletranscribeTab={handletranscribeTab}
+              OpenProfile={OpenProfile}
+              setOpenProfile={setOpenProfile}
+              setDeleteChat={setDeleteChat}
+            />
           </div>
         )}
 

@@ -8,15 +8,20 @@ import { GrHistory } from "react-icons/gr";
 import { useTransHistory } from "../hooks/useFetchChatHistory";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { IoReturnUpForward } from "react-icons/io5";
-import { useDeleteChat } from "../hooks/useDeleteChat";
 
-const Sidebar: React.FC<any> = ({ IsSidebarOpen, handleSidebar, handletranscribeTab, setHistorycontent, transChats, NewTranscribeTab, profileOpen }) => {
+
+const Sidebar: React.FC<any> = ({ IsSidebarOpen, handleSidebar, handletranscribeTab, setHistorycontent, transChats, NewTranscribeTab, setOpenProfile, OpenProfile, setDeleteChat, setIsWindow}) => {
+
+    // States
     const [OpenHistory, setOpenHistory] = useState<boolean>(true);
-    const { FetchTransHistory } = useTransHistory();
     const [chat_id, setChat_id] = useState<string | null>(null);
     const [options, setOptions] = useState<boolean>(false);
-    const {DeleteChat} = useDeleteChat();
+    
+    // Custom hooks
+    const { FetchTransHistory } = useTransHistory();
 
+
+    // Functions
     const handleHistoryOpen = () => {
         setOpenHistory(!OpenHistory);
     }
@@ -31,6 +36,18 @@ const Sidebar: React.FC<any> = ({ IsSidebarOpen, handleSidebar, handletranscribe
 
     const handleOptions = () => {
         setOptions(!options);
+    }
+
+    const handleDeleteChat = (chat_id : any) =>{
+        setDeleteChat(chat_id)
+        if(chat_id){
+            setIsWindow(true)
+        }
+    }
+
+    const handleProfile = () =>{
+        setOpenProfile(!OpenProfile)
+        setIsWindow(true)
     }
 
     return (
@@ -96,7 +113,7 @@ const Sidebar: React.FC<any> = ({ IsSidebarOpen, handleSidebar, handletranscribe
 
                                                     </p>
 
-                                                    <HiOutlineDotsHorizontal className="text-2xl opacity-0 group-hover:opacity-100 transition-all duration-300" onClick={()=>DeleteChat(chat.trans_id)} />
+                                                    <HiOutlineDotsHorizontal className="text-2xl opacity-0 group-hover:opacity-100 transition-all duration-300" onClick={()=>handleDeleteChat(chat.trans_id)} />
                                                 </div>
 
                                             ) : (
@@ -127,7 +144,7 @@ const Sidebar: React.FC<any> = ({ IsSidebarOpen, handleSidebar, handletranscribe
 
             <div className={`border-t border-gray-300 h-auto py-5 gap-5 items-center justify-start  ${IsSidebarOpen === false ? " flex-col flex items-start ml-2" : " opacity-100 flex justify-between"}`}>
                 <IoSettingsOutline className="w-6 h-6 cursor-pointer" />
-                <FaRegUserCircle className="w-6 h-6 cursor-pointer" onClick={profileOpen} />
+                <FaRegUserCircle className="w-6 h-6 cursor-pointer" onClick={handleProfile} />
             </div>
 
         </div>

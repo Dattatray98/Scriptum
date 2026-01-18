@@ -1,10 +1,11 @@
 import { LuRedo2, LuUndo2 } from "react-icons/lu"
 import React from "react";
 
-
-const ContentTab: React.FC<any> = ({ videoName, DownloadSRT, historyContent }) => {
+const ContentTab: React.FC<any> = ({ videoName, DownloadSRT, historyContent}) => {
+    
     return (
-        <div className="h-full">
+        <div className="relative h-full">
+            
             <div className="border-b border-gray-300 h-15 rounded-t-xl flex items-center justify-between px-8">
                 <div>
                     <p className="text-lg font-medium text-gray-800">{videoName}</p>
