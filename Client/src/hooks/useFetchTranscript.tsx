@@ -51,7 +51,6 @@ export const useFetchTranscript = (file: File | null,) => {
 
             setTranscript(response.data.result);
             setSrtFile(response.data.srt_file);
-            console.log(response.data.result);
 
             navigate("/workspace", {
                 state: {

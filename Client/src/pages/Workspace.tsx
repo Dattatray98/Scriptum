@@ -4,10 +4,7 @@ import { useState } from "react";
 import { useFetchTranscript } from "../hooks/useFetchTranscript";
 import { useDownloadFile } from "../hooks/useDownloadFile";
 import ContentTab from "../components/ContentTab";
-import ProfileWindow from "../components/ProfileWindow";
-import { useTransChat } from "../hooks/useFetchChatHistory";
-import type { TranscriptDataTypes } from "../types/transcript.types";
-import { useDeleteChat } from "../hooks/useDeleteChat";
+import { useTransChat} from "../hooks/useFetchChatHistory";
 import WindowComponent from "../components/WindowComponent";
 
 const Workspace = () => {
@@ -16,16 +13,18 @@ const Workspace = () => {
   const [IsSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [NewTranscribeTab, setNewTranscribeTab] = useState<boolean>(true);
   const [File, setFile] = useState<File | null>(null);
-  const [historyContent, setHistorycontent] = useState<TranscriptDataTypes>();
   const [OpenProfile, setOpenProfile] = useState<boolean>(false);
   const [isWindow, setIsWindow] = useState<boolean>(false);
   const [deleteChat, setDeleteChat] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [chat_id, setChat_id] = useState<string | null>(null);
 
 
   // Custom Hooks 
   const { Loading, transcriptfetching, srtFile, videoName } = useFetchTranscript(File);
   const { DownloadSRT } = useDownloadFile(srtFile, videoName);
   const { transChats } = useTransChat();
+  // const {transHistory} = useTransHistory(chat_id);
 
 
   // functions 
@@ -57,8 +56,11 @@ const Workspace = () => {
         setOpenProfile={setOpenProfile}
         OpenProfile={OpenProfile}
         transChats={transChats ?? []}
-        setHistorycontent={setHistorycontent}
         setDeleteChat={setDeleteChat}
+        editingId={editingId} 
+        setEditingId={setEditingId}
+        chat_id={chat_id} 
+        setChat_id={setChat_id}
       />
 
       <div className=" border absolute top-10 left-10 w-[400px] h-[400px] bg-purple-400 rounded-full blur-[180px] opacity-40 z-0"></div>
@@ -125,7 +127,12 @@ const Workspace = () => {
           </div>
 
         ) : (
-          <ContentTab historyContent={historyContent?.original_transcript ?? []} contentdata={historyContent} videoName={videoName} DownloadSRT={DownloadSRT} />
+          <ContentTab 
+          DownloadSRT={DownloadSRT} 
+          editingId={editingId}
+          setEditingId={setEditingId}
+          chat_id={chat_id}
+          />
         )}
 
         {isWindow && (

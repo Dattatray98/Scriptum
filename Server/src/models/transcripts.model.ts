@@ -6,7 +6,7 @@ const TranscriptSegmentSchema = new Schema(
         end: { type: Number, required: true },
         text: { type: String, required: true },
     },
-    { _id: false }
+    { _id: true }
 );
 
 const TranscriptVersionSchema = new Schema(

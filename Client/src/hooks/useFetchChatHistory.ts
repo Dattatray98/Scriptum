@@ -29,31 +29,35 @@ export const useTransChat = () => {
     return { transChats, loading, error }
 }
 
-export const useTransHistory = () => {
+export const useTransHistory = (trans_id: any, editsegText : any) => {
     const [transHistory, setTransHistory] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<null | string>(null); 
+    const [error, setError] = useState<null | string>(null);
     const api = useAxios();
 
-    const FetchTransHistory = async (trans_id : any) => {
-        try {
-            setLoading(true);
-            const response = await api.get('/get/transcript', {
-                params: {
-                    trans_id: trans_id
-                }
-            });
+    useEffect(() => {
+        if (!trans_id) return;
+        const FetchTransHistory = async () => {
+            try {
+                setLoading(true);
+                const response = await api.get('/get/transcript', {
+                    params: {
+                        trans_id: trans_id
+                    }
+                });
 
-            setTransHistory(response.data);
-            return response.data
+                setTransHistory(response.data);
 
-        } catch (err) {
-            console.log(err);
-            setError("Failed to fetch transcript history");
-        } finally {
-            setLoading(false);
+            } catch (err) {
+                console.log(err);
+                setError("Failed to fetch transcript history");
+            } finally {
+                setLoading(false);
+            }
         }
-    }
 
-    return {transHistory, loading, error, FetchTransHistory}
+        FetchTransHistory()
+    }, [trans_id, editsegText])
+
+    return { transHistory, loading, error }
 }

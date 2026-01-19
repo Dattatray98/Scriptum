@@ -5,20 +5,23 @@ import { PiBrain } from "react-icons/pi";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FaPlus, FaRegUserCircle } from "react-icons/fa";
 import { GrHistory } from "react-icons/gr";
-import { useTransHistory } from "../hooks/useFetchChatHistory";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { IoReturnUpForward } from "react-icons/io5";
+import { useUpdateChatTitle } from "../hooks/useUpdateData";
+import { FiEdit } from "react-icons/fi";
+import { AiFillDelete } from "react-icons/ai";
 
-
-const Sidebar: React.FC<any> = ({ IsSidebarOpen, handleSidebar, handletranscribeTab, setHistorycontent, transChats, NewTranscribeTab, setOpenProfile, OpenProfile, setDeleteChat, setIsWindow}) => {
+const Sidebar: React.FC<any> = ({ IsSidebarOpen, handleSidebar, handletranscribeTab, transChats, NewTranscribeTab, setOpenProfile, OpenProfile, setDeleteChat, setIsWindow, editingId, setEditingId, chat_id, setChat_id }) => {
 
     // States
     const [OpenHistory, setOpenHistory] = useState<boolean>(true);
-    const [chat_id, setChat_id] = useState<string | null>(null);
-    const [options, setOptions] = useState<boolean>(false);
-    
+    const [optionsChatId, setOptionsChatId] = useState<string | null>(null);
+    const [editingTitle, setEditingTitle] = useState<string>();
+
+
+
     // Custom hooks
-    const { FetchTransHistory } = useTransHistory();
+    const { updateChatTitle } = useUpdateChatTitle();
 
 
     // Functions
@@ -26,26 +29,15 @@ const Sidebar: React.FC<any> = ({ IsSidebarOpen, handleSidebar, handletranscribe
         setOpenHistory(!OpenHistory);
     }
 
-    const handlehistory = async (id: any) => {
-        handletranscribeTab(false);
-        const data = await FetchTransHistory(id);
-        if (data) {
-            setHistorycontent(data);
-        }
-    }
 
-    const handleOptions = () => {
-        setOptions(!options);
-    }
-
-    const handleDeleteChat = (chat_id : any) =>{
+    const handleDeleteChat = (chat_id: any) => {
         setDeleteChat(chat_id)
-        if(chat_id){
+        if (chat_id) {
             setIsWindow(true)
         }
     }
 
-    const handleProfile = () =>{
+    const handleProfile = () => {
         setOpenProfile(!OpenProfile)
         setIsWindow(true)
     }
@@ -96,37 +88,72 @@ const Sidebar: React.FC<any> = ({ IsSidebarOpen, handleSidebar, handletranscribe
                         ) : (
                             <div className="relative flex flex-col gap-3 w-full">
                                 {transChats.Chats.map((chat: any) => (
-                                    <div className={`border group border-gray-200 shadow-sm rounded-xl py-2 px-3 font-medium text-sm w-full text-start cursor-pointer transition-all duration-500 ${chat_id === chat.trans_id ? "bg-blue-200" : "hover:bg-gray-300  "} `} >
+                                    <div className={`group shadow-sm rounded-xl w-[275px] 
+                                    ${chat_id === chat.trans_id ? "bg-blue-200" : ""}`}>
 
-                                        {!options
-                                            ? (
-                                                <div className="w-full flex justify-between items-center">
+                                        {optionsChatId !== chat.trans_id ? (
+                                            <div className="flex justify-between items-center px-3 hover:bg-gray-300 rounded-xl border border-gray-200">
 
-                                                    <p key={chat.trans_id}
-                                                        className={`truncate w-[88%] cursor-pointer `}
+                                                {/* Title / Editing */}
+                                                {editingId === chat.trans_id ? (
+                                                    <textarea
+                                                        className="w-[88%] resize-none outline-none py-2"
+                                                        value={editingTitle}
+                                                        onChange={(e) => setEditingTitle(e.target.value)}
+                                                        onBlur={() => {
+                                                            if (editingTitle !== chat.title) {
+                                                                updateChatTitle(chat.trans_id, editingTitle);
+                                                            }
+                                                            setEditingId(null);
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <p
+                                                        className="truncate w-[88%] py-2 cursor-pointer"
                                                         onClick={() => {
-                                                            handlehistory(chat.trans_id);
+                                                            handletranscribeTab(false);
                                                             setChat_id(chat.trans_id);
-                                                        }}>
-
+                                                        }}
+                                                        onDoubleClick={() => {
+                                                            setEditingId(chat.trans_id);
+                                                            setEditingTitle(chat.title);
+                                                        }}
+                                                    >
                                                         {chat.title}
-
                                                     </p>
+                                                )}
 
-                                                    <HiOutlineDotsHorizontal className="text-2xl opacity-0 group-hover:opacity-100 transition-all duration-300" onClick={()=>handleDeleteChat(chat.trans_id)} />
-                                                </div>
-
-                                            ) : (
-
-                                                <div className="w-full flex justify-between" >
-                                                    <p className="">hello these are option for </p>
-                                                    <IoReturnUpForward
-                                                        className="h-5 w-5"
-                                                        onClick={handleOptions} />
-                                                </div>
-
-                                            )}
+                                                {/* Options trigger */}
+                                                <HiOutlineDotsHorizontal
+                                                    className="text-2xl opacity-0 group-hover:opacity-100"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setOptionsChatId(chat.trans_id);
+                                                    }}
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div className="flex gap-6 justify-end py-2 px-3 border border-gray-200 rounded-xl">
+                                                <FiEdit
+                                                    className="h-5 w-5 cursor-pointer hover:scale-[0.92] transition-all duration-300"
+                                                    onClick={() => {
+                                                        setEditingId(chat.trans_id);
+                                                        setEditingTitle(chat.title);
+                                                        setOptionsChatId(null);
+                                                    }}
+                                                />
+                                                <AiFillDelete
+                                                    className="h-6 w-6 cursor-pointer hover:scale-[0.92] transition-all duration-300"
+                                                    onClick={() => handleDeleteChat(chat.trans_id)}
+                                                />
+                                                <IoReturnUpForward
+                                                    className="h-6 w-6 cursor-pointer hover:scale-[0.92] transition-all duration-300"
+                                                    onClick={() => setOptionsChatId(null)}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
+
                                 ))}
                             </div>
                         )}
