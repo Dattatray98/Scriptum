@@ -31,6 +31,7 @@ export const useTransChat = () => {
 
 export const useTransHistory = (trans_id: any, editsegText : any) => {
     const [transHistory, setTransHistory] = useState<any>(null);
+    const [videoUrl, setVideoUrl] = useState();
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<null | string>(null);
     const api = useAxios();
@@ -47,6 +48,7 @@ export const useTransHistory = (trans_id: any, editsegText : any) => {
                 });
 
                 setTransHistory(response.data);
+                setVideoUrl(response.data.url);
 
             } catch (err) {
                 console.log(err);
@@ -59,5 +61,5 @@ export const useTransHistory = (trans_id: any, editsegText : any) => {
         FetchTransHistory()
     }, [trans_id, editsegText])
 
-    return { transHistory, loading, error }
+    return { transHistory, videoUrl, loading, error }
 }

@@ -47,7 +47,13 @@ const SignUp: React.FC<any> = ({ setLoginOpen, LoginOpen }) => {
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-3">
-                  <button className="py-2 px-8 border border-gray-200 shadow-sm rounded-2xl cursor-pointer bg-blue-100 font-medium" onClick={() => handleLogin(email, password)}>Login</button>
+                  <button className="py-2 px-8 border border-gray-200 shadow-sm rounded-2xl cursor-pointer bg-blue-100 font-medium" onClick={() => handleLogin(email, password)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.currentTarget.click();
+                      }
+                    }}
+                  >Login</button>
                   <p className="text-center text-gray-300 font-medium">Or</p>
                   <div className="flex gap-5 items-center">
                     <p className="font-medium text-gray-300">Continue With</p>

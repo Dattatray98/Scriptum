@@ -10,11 +10,15 @@ const ContentTab: React.FC<any> = ({ DownloadSRT, chat_id, }) => {
     const [editSeg_Id, setEditSeg_id] = useState<string | null>(null);
     const [editingText, setEditingText] = useState<string | null>(null);
 
+
+    
     const { updateTranscript } = useUpdateTranscript();
-    const { transHistory } = useTransHistory(chat_id, editingText);
+    const { transHistory, videoUrl } = useTransHistory(chat_id, editingText);
 
     const historyContent = transHistory?.original_transcript ?? []
     const videoName = transHistory?.title
+
+
 
     useEffect(() => {
         setIsEditing(false);
@@ -102,14 +106,14 @@ const ContentTab: React.FC<any> = ({ DownloadSRT, chat_id, }) => {
                     ))}
                 </div>
 
-                <div className="border-l border-gray-300 h-full w-[30%] p-5">
-                    <div className="border border-gray-300 shadow-sm h-60 rounded-xl">
+                <div className="border-l border-gray-300 h-full w-[30%] p-5 overflow-y-scroll scrollbar-hidden">
+                    <div className="border border-gray-300 shadow-sm rounded-xl p-1">
+                        <video className="h-full w-full rounded-xl" src={videoUrl} controls />
                     </div>
-                    <div className="px-2 py-3 border-b border-gray-300">
-                        <p>{videoName}</p>
-                        <p>This is the video description</p>
-                        <p>Source of video : uploaded</p>
-
+                    <div className="px-2 py-3 space-y-1.5 border-b border-gray-300">
+                        <p className="font-medium text-lg truncate">Title : {videoName}</p>
+                        <p className="text-lg text-gray-700">This is the video description</p>
+                        <p className="text-lg text-gray-700">Source : uploaded</p>
                     </div>
 
                 </div>

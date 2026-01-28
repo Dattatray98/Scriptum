@@ -10,22 +10,19 @@ const Transcription_model_API = process.env.TRANSCRIPTION_MODEL_API
 //     console.log("model api is missing")
 // }
 
-export const Transcribe = async (file: Express.Multer.File) => {
-
-    const formData = new FormData();
-
-    formData.append("file", file.buffer, {
-        filename: file.originalname,
-        contentType: file.mimetype,
-    });
-
+export const Transcribe = async (url: String) => {
+    console.log("transcribe url : ",url);
 
     try {
 
         const response = await axios.post("http://127.0.0.1:8000/scriptum",
-            formData,
             {
-                headers: formData.getHeaders(),
+                media_url:url
+            },
+            {
+                headers:{
+                    "Content-Type": "application/json"
+                }
             }
         );
         return response.data.result;

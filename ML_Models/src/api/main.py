@@ -1,12 +1,24 @@
 import re
-from fastapi import FastAPI, UploadFile, File
+import shutil
+import uuid
+import requests
+from pathlib import Path
+import os
+
+
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
+
 from src.config.whisper import model
 from src.postprocessing.srt_generator import save_srt
-from pathlib import Path
 from src.api.routes.DownloadFile import router as download_route
 
 app = FastAPI(title="ScripTum ML API")
+
+
+
 
 origins = [
     "http://localhost:5174",
@@ -24,8 +36,11 @@ app.add_middleware(
 )
 
 # Create folders
-Path("audio").mkdir(exist_ok=True)
-Path("srt").mkdir(exist_ok=True)
+MEDIA_DIR = Path("media")
+SRT_DIR = Path("srt")
+
+MEDIA_DIR.mkdir(exist_ok=True)
+SRT_DIR.mkdir(exist_ok=True)
 
 
 def clean_filename(name: str) -> str:
@@ -34,37 +49,65 @@ def clean_filename(name: str) -> str:
     return name[:50]  # limit filename length
 
 
+def downloadFile(url: str, destination: Path):
+    response = requests.get(url, stream=True, timeout=60)
+    if response.status_code != 200:
+        raise HTTPException(status_code=400, detail="failled to download media")
+
+    with open(destination, "wb") as f:
+        for chunks in response.iter_content(chunk_size=8192):
+            if chunks:
+                f.write(chunks)
+
+
+
+class Item(BaseModel):
+    media_url: str
+
+
 @app.post("/scriptum")
-async def scriptum(file: UploadFile = File(...)):
+async def scriptum(item: Item):
+    media_url = item.media_url
 
-    # original filename
-    raw_name = Path(file.filename).stem
+    print("Received media URL: ", media_url)
 
-    # clean filename
+    if not media_url.startswith("http"):
+        raise HTTPException(status_code=400, detail="Invalid media URL")
+
+    raw_name = Path(media_url).stem
+    original_ext = Path(media_url).suffix
+
     safe_name = clean_filename(raw_name)
+    unique_Id = uuid.uuid4().hex[:8]
 
-    # clean audio filename
-    audio_path = Path("audio") / f"{safe_name}.mp3"
+    media_path = MEDIA_DIR / f"{safe_name}_{unique_Id}{original_ext}"
+    srt_path = SRT_DIR / f"{safe_name}_{unique_Id}.srt"
 
-    # save uploaded audio
-    with open(audio_path, "wb") as buffer:
-        buffer.write(await file.read())
+    downloadFile(media_url, media_path)
+
+    try:
+        result = model.transcribe(str(media_path), fp16=False)
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Transcription failed : {str(e)}")
 
     # transcribe
-    result = model.transcribe(str(audio_path), fp16=False)
     segments = result.get("segments", [])
 
     # create SRT path using CLEAN filename
-    srt_path = Path("srt") / f"{safe_name}.srt"
 
     # save SRT
     save_srt(segments, srt_path)
 
+    if srt_path.exists() is True:
+        os.remove(media_path)
+
     return {
         "message": "File received successfully",
         "filename": safe_name,  # return clean name to frontend
-        "srt_file": f"{safe_name}.srt",
-        "srt_url": f"/download/{safe_name}.srt",
+        "media_file": media_path.name,
+        "srt_file": srt_path.name,
+        "srt_url": f"/download/{srt_path.name}",
         "result": segments,
     }
 

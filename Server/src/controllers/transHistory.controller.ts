@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import transcriptsModel from "../models/transcripts.model";
 import mongoose from "mongoose";
+import cloudinary from "../configs/Cloudinary.config";
 
 export const TranscriptHisotry = async (req: Request, res: Response) => {
     try {
@@ -13,15 +14,19 @@ export const TranscriptHisotry = async (req: Request, res: Response) => {
             _id: trans_id
         });
 
+
         return res.status(201).json({
             title: transcript?.title,
             trans_id: transcript?._id,
             user_id: transcript?.user_id,
+            url: transcript?.media?.url,
             original_transcript: transcript?.original_transcript,
             version_transcript: transcript?.transcript_versions
         })
 
-    } catch (error) {
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({message: "server error", err});
 
     }
 }
@@ -53,7 +58,8 @@ export const transChats = async (req: Request, res: Response) => {
 
 
     } catch (err) {
-
+        console.log(err);
+        return res.status(500).json({ message: "server error", err });
     }
 }
 
@@ -77,7 +83,7 @@ export const DeleteTransChat = async (req: Request, res: Response) => {
             response
         });
     } catch (err) {
-        res.status(500).json({ message: "server error", err })
+        return res.status(500).json({ message: "server error", err })
     }
 }
 
@@ -97,7 +103,7 @@ export const EditChatName = async (req: Request, res: Response) => {
             response
         });
     } catch (err) {
-        return res.status(500).json({ message: "sever error" });
+        return res.status(500).json({ message: "sever error", err });
     }
 }
 
@@ -126,12 +132,13 @@ export const EditTranscript = async (req: Request, res: Response) => {
 
             }, { new: true }
         );
-        
+
         return res.status(201).json({
             response
         });
 
     } catch (err) {
         console.log(err)
+        return res.status(500).json({message: "Server error", err})
     }
 }
