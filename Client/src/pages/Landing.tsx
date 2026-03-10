@@ -49,7 +49,7 @@ const Landing = () => {
         }, 3000);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [words.length]);
 
     const OpenLoginWindow = () => {
         if (auth?.user) {

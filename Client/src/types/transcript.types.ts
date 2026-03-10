@@ -9,5 +9,5 @@ export type TranscriptDataTypes = {
     trans_id: string;
     user_id: string;
     original_transcript: TranscriptSegment[];
-    version_transcript: any[];
+    version_transcript: unknown[];
 };

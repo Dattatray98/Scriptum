@@ -11,7 +11,21 @@ import { useUpdateChatTitle } from "../hooks/useUpdateData";
 import { FiEdit } from "react-icons/fi";
 import { AiFillDelete } from "react-icons/ai";
 
-const Sidebar: React.FC<any> = ({ IsSidebarOpen, handleSidebar, handletranscribeTab, transChats, NewTranscribeTab, setOpenProfile, OpenProfile, setDeleteChat, setIsWindow, editingId, setEditingId, chat_id, setChat_id }) => {
+const Sidebar: React.FC<{
+    IsSidebarOpen: boolean;
+    handleSidebar: () => void;
+    handletranscribeTab: (val: boolean) => void;
+    transChats: { Chats: { trans_id: string; title: string }[] } | null | undefined;
+    NewTranscribeTab: boolean;
+    setOpenProfile: (val: boolean) => void;
+    OpenProfile: boolean;
+    setDeleteChat: (val: string | null) => void;
+    setIsWindow: (val: boolean) => void;
+    editingId: string | null;
+    setEditingId: (val: string | null) => void;
+    chat_id: string | null;
+    setChat_id: (val: string | null) => void;
+}> = ({ IsSidebarOpen, handleSidebar, handletranscribeTab, transChats, NewTranscribeTab, setOpenProfile, OpenProfile, setDeleteChat, setIsWindow, editingId, setEditingId, chat_id, setChat_id }) => {
 
     // States
     const [OpenHistory, setOpenHistory] = useState<boolean>(true);
@@ -30,7 +44,7 @@ const Sidebar: React.FC<any> = ({ IsSidebarOpen, handleSidebar, handletranscribe
     }
 
 
-    const handleDeleteChat = (chat_id: any) => {
+    const handleDeleteChat = (chat_id: string) => {
         setDeleteChat(chat_id)
         if (chat_id) {
             setIsWindow(true)
@@ -83,11 +97,11 @@ const Sidebar: React.FC<any> = ({ IsSidebarOpen, handleSidebar, handletranscribe
                         className={` overflow-hidden py-3 flex flex-col gap-2 items-start`}
                     >
 
-                        {!transChats || transChats.length === 0 ? (
+                        {!transChats || !transChats.Chats || transChats.Chats.length === 0 ? (
                             <p>No Transcripts yet</p>
                         ) : (
                             <div className="relative flex flex-col gap-3 w-full">
-                                {transChats.Chats.map((chat: any) => (
+                                {transChats.Chats.map((chat: { trans_id: string; title: string }) => (
                                     <div className={`group shadow-sm rounded-xl w-[275px] 
                                     ${chat_id === chat.trans_id ? "bg-blue-200" : ""}`}>
 
@@ -101,7 +115,7 @@ const Sidebar: React.FC<any> = ({ IsSidebarOpen, handleSidebar, handletranscribe
                                                         value={editingTitle}
                                                         onChange={(e) => setEditingTitle(e.target.value)}
                                                         onBlur={() => {
-                                                            if (editingTitle !== chat.title) {
+                                                            if (editingTitle !== undefined && editingTitle !== chat.title) {
                                                                 updateChatTitle(chat.trans_id, editingTitle);
                                                             }
                                                             setEditingId(null);

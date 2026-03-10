@@ -8,7 +8,7 @@ export const useUpdateChatTitle = () => {
     const api = useAxios();
 
 
-    const updateChatTitle = async (trans_id: any, data: any) => {
+    const updateChatTitle = async (trans_id: string, data: string) => {
         try {
             setLoading(true);
 
@@ -38,12 +38,12 @@ export const useUpdateTranscript = () => {
     const api = useAxios();
 
 
-    const updateTranscript = async (trans_id: any, seg_id: any, new_segment:any) => {
+    const updateTranscript = async (trans_id: string | null, seg_id: string, new_segment: string | null) => {
         try {
             setLoading(true);
 
-            const response = await api.patch(`/update/chat/segment/${trans_id}/${seg_id}`,{
-                new_segment:new_segment
+            const response = await api.patch(`/update/chat/segment/${trans_id}/${seg_id}`, {
+                new_segment: new_segment
             });
 
             return response.data

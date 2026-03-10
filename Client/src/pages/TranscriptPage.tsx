@@ -17,7 +17,21 @@ const TranscriptPage = () => {
 
     return (
         <div className='flex h-screen p-5 gap-2 bg-black'>
-            <Sidebar IsSidebarOpen={IsSidebarOpen} handleSidebar={handleSidebar} />
+            <Sidebar
+                IsSidebarOpen={IsSidebarOpen}
+                handleSidebar={handleSidebar}
+                handletranscribeTab={() => { }}
+                transChats={null}
+                NewTranscribeTab={false}
+                setOpenProfile={() => { }}
+                OpenProfile={false}
+                setDeleteChat={() => { }}
+                setIsWindow={() => { }}
+                editingId={null}
+                setEditingId={() => { }}
+                chat_id={null}
+                setChat_id={() => { }}
+            />
             <TranscriptTab Transcript={text} srtFile={srtFile} videoName={videoName} />
         </div>
     )

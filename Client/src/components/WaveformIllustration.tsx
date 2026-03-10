@@ -2,7 +2,7 @@ import type React from "react";
 
 
 
-const WaveformIllustration : React.FC<any> = ({IsSignUP}) => {
+const WaveformIllustration: React.FC<{ IsSignUP?: boolean }> = ({ IsSignUP }) => {
   const heights = [
     18, 35, 52, 68, 78, 65, 48, 38, 55, 72, 82, 70,
     52, 42, 58, 75, 85, 72, 58, 45, 62, 75, 65, 48, 35, 22

@@ -9,8 +9,8 @@ export const useFetchTranscript = (file: File | null,) => {
     ]>();
     const [srtFile, setSrtFile] = useState("");
     const navigate = useNavigate();
-    const [videoName, setVideoName] = useState<any>()
-
+    const [videoName, setVideoName] = useState<string>()
+    const api = useAxios();
 
     const transcriptfetching = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -36,7 +36,6 @@ export const useFetchTranscript = (file: File | null,) => {
         }
 
         formData.append("filename", clean_videoName)
-        const api = useAxios();
 
         try {
             setLoading(true);

@@ -3,7 +3,7 @@ import { useAxios } from "./useAxios";
 
 
 export const useTransChat = () => {
-    const [transChats, setTransChats] = useState([]);
+    const [transChats, setTransChats] = useState<{ Chats: { trans_id: string; title: string }[] } | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<null | string>(null);
     const api = useAxios();
@@ -24,13 +24,13 @@ export const useTransChat = () => {
 
         }
         FetchTransChats()
-    }, [transChats])
+    }, [api, transChats])
 
     return { transChats, loading, error }
 }
 
-export const useTransHistory = (trans_id: any, editsegText : any) => {
-    const [transHistory, setTransHistory] = useState<any>(null);
+export const useTransHistory = (trans_id: string | null, editsegText: string | null) => {
+    const [transHistory, setTransHistory] = useState<{ title: string; original_transcript: { _id: string; start: number; end: number; text: string }[] } | null>(null);
     const [videoUrl, setVideoUrl] = useState();
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<null | string>(null);
@@ -59,7 +59,7 @@ export const useTransHistory = (trans_id: any, editsegText : any) => {
         }
 
         FetchTransHistory()
-    }, [trans_id, editsegText])
+    }, [trans_id, editsegText, api])
 
     return { transHistory, videoUrl, loading, error }
 }

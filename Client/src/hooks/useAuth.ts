@@ -13,12 +13,12 @@ export const useAuth = () => {
         throw new Error('useAuth must be used inside AuthProvider')
     }
 
-    const { setUser} = auth;
+    const { setUser } = auth;
 
 
     const handleSignUp = async (email: string, password: string) => {
         try {
-         
+
             const response = await api.post("/auth/signup", {
                 email,
                 password,
@@ -47,7 +47,7 @@ export const useAuth = () => {
             localStorage.setItem("token", response.data.token)
 
             navigate("/workspace")
-        } catch (error) { }
+        } catch (error) { console.log(error); }
     }
 
     return { handleSignUp, handleLogin };

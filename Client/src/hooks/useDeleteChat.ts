@@ -8,7 +8,7 @@ export const useDeleteChat = () => {
     const api = useAxios();
 
 
-    const DeleteChat = async (trans_id: any) => {
+    const DeleteChat = async (trans_id: string) => {
         try {
             setLoading(true);
 

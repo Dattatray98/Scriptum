@@ -12,7 +12,7 @@ const navabaritem = [
 
 
 
-const Navbar: React.FC<any> = ({ LoginOpen, OpenLoginWindow }) => {
+const Navbar: React.FC<{ LoginOpen: boolean, OpenLoginWindow: () => void }> = ({ LoginOpen, OpenLoginWindow }) => {
   const [IsScroll, setIsScroll] = useState(false);
   const Auth = useContext(AuthContext);
   const navigate = useNavigate();

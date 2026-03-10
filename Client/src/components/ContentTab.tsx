@@ -5,13 +5,13 @@ import { useUpdateTranscript } from "../hooks/useUpdateData";
 import { useTransHistory } from "../hooks/useFetchChatHistory";
 // import { useTransHistory } from "../hooks/useFetchChatHistory";
 
-const ContentTab: React.FC<any> = ({ DownloadSRT, chat_id, }) => {
+const ContentTab: React.FC<{ DownloadSRT: () => void, chat_id: string | null }> = ({ DownloadSRT, chat_id, }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editSeg_Id, setEditSeg_id] = useState<string | null>(null);
     const [editingText, setEditingText] = useState<string | null>(null);
 
 
-    
+
     const { updateTranscript } = useUpdateTranscript();
     const { transHistory, videoUrl } = useTransHistory(chat_id, editingText);
 
@@ -20,7 +20,9 @@ const ContentTab: React.FC<any> = ({ DownloadSRT, chat_id, }) => {
 
 
 
+
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsEditing(false);
         setEditSeg_id(null);
         setEditingText("");
@@ -63,7 +65,7 @@ const ContentTab: React.FC<any> = ({ DownloadSRT, chat_id, }) => {
             <div className="flex h-[93.4%] justify-between py-2">
 
                 <div className="p-5 flex flex-col gap-8 w-[70%]  overflow-y-scroll scrollbar-hidden" >
-                    {Array.isArray(historyContent) && historyContent.map((item: any) => (
+                    {Array.isArray(historyContent) && historyContent.map((item: { _id: string; start: number; end: number; text: string }) => (
                         <div key={item._id}
                             onClick={() => {
                                 if (!isEditing) return;
@@ -78,7 +80,7 @@ const ContentTab: React.FC<any> = ({ DownloadSRT, chat_id, }) => {
                                     <textarea
                                         className="w-full resize-none outline-none text-[19px] text-gray-800"
                                         rows={1}
-                                        value={editSeg_Id === item._id ? editingText : item.text}
+                                        value={editSeg_Id === item._id ? (editingText || "") : item.text}
                                         onChange={(e) => setEditingText(e.target.value)}
                                         onBlur={() => {
                                             updateTranscript(chat_id, item._id, editingText)

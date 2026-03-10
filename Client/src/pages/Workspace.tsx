@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useFetchTranscript } from "../hooks/useFetchTranscript";
 import { useDownloadFile } from "../hooks/useDownloadFile";
 import ContentTab from "../components/ContentTab";
-import { useTransChat} from "../hooks/useFetchChatHistory";
+import { useTransChat } from "../hooks/useFetchChatHistory";
 import WindowComponent from "../components/WindowComponent";
 
 const Workspace = () => {
@@ -22,7 +22,7 @@ const Workspace = () => {
 
   // Custom Hooks 
   const { Loading, transcriptfetching, srtFile, videoName } = useFetchTranscript(File);
-  const { DownloadSRT } = useDownloadFile(srtFile, videoName);
+  const { DownloadSRT } = useDownloadFile(srtFile, videoName || "");
   const { transChats } = useTransChat();
   // const {transHistory} = useTransHistory(chat_id);
 
@@ -55,11 +55,11 @@ const Workspace = () => {
         setIsWindow={setIsWindow}
         setOpenProfile={setOpenProfile}
         OpenProfile={OpenProfile}
-        transChats={transChats ?? []}
+        transChats={transChats}
         setDeleteChat={setDeleteChat}
-        editingId={editingId} 
+        editingId={editingId}
         setEditingId={setEditingId}
-        chat_id={chat_id} 
+        chat_id={chat_id}
         setChat_id={setChat_id}
       />
 
@@ -127,11 +127,9 @@ const Workspace = () => {
           </div>
 
         ) : (
-          <ContentTab 
-          DownloadSRT={DownloadSRT} 
-          editingId={editingId}
-          setEditingId={setEditingId}
-          chat_id={chat_id}
+          <ContentTab
+            DownloadSRT={DownloadSRT}
+            chat_id={chat_id}
           />
         )}
 

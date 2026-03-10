@@ -5,7 +5,7 @@ import WaveformIllustration from "../WaveformIllustration";
 import { useAuth } from "../../hooks/useAuth";
 import { RxCross2 } from "react-icons/rx";
 
-const SignUp: React.FC<any> = ({ setLoginOpen, LoginOpen }) => {
+const SignUp: React.FC<{ setLoginOpen: (open: boolean) => void, LoginOpen: boolean }> = ({ setLoginOpen, LoginOpen }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [IsSignUP, setIsSignUP] = useState<boolean>(false);

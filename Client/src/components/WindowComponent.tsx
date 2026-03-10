@@ -2,21 +2,28 @@ import type React from "react"
 import { useDeleteChat } from "../hooks/useDeleteChat"
 import ProfileWindow from "./ProfileWindow";
 
-const WindowComponent: React.FC<any> = ({ deleteChat, setDeleteChat, setIsWindow, handletranscribeTab, OpenProfile, setOpenProfile }) => {
+const WindowComponent: React.FC<{
+    deleteChat: string | null;
+    setDeleteChat: (val: string | null) => void;
+    setIsWindow: (val: boolean) => void;
+    handletranscribeTab: (val: boolean) => void;
+    OpenProfile: boolean;
+    setOpenProfile: (val: boolean) => void;
+}> = ({ deleteChat, setDeleteChat, setIsWindow, handletranscribeTab, OpenProfile, setOpenProfile }) => {
     const { DeleteChat } = useDeleteChat();
 
-    const handleDeleteChat = (deleteChat: any) => {
+    const handleDeleteChat = (deleteChat: string) => {
         DeleteChat(deleteChat);
         setIsWindow(false);
         handletranscribeTab(true);
     }
 
-    const CancelDeleteChat = ()=>{
+    const CancelDeleteChat = () => {
         setDeleteChat(null)
         setIsWindow(false)
     }
 
-    const closeProfile = ()=>{
+    const closeProfile = () => {
         setOpenProfile(false);
         setIsWindow(false)
     }

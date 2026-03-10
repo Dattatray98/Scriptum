@@ -2,16 +2,17 @@ import React, { createContext, useEffect, useState } from "react";
 import { useAxios } from "../hooks/useAxios";
 
 interface AuthContextType {
-  user: any | null;
-  setUser: React.Dispatch<React.SetStateAction<any | null>>;
+  user: { email: string; _id: string;[key: string]: unknown } | null;
+  setUser: React.Dispatch<React.SetStateAction<{ email: string; _id: string;[key: string]: unknown } | null>>;
   logout: () => void;
   loading: boolean;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext<AuthContextType | null>(null);
 
-export const AuthProvider: React.FC<any> = ({ children }) => {
-  const [user, setUser] = useState<any | null>(null);   // it has user state
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<{ email: string; _id: string;[key: string]: unknown } | null>(null);   // it has user state
   const [loading, setLoading] = useState<boolean>(true);  // it has loading state
   const api = useAxios();  // backend initial api
 
