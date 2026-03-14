@@ -1,5 +1,4 @@
 import re
-import shutil
 import uuid
 import requests
 from pathlib import Path
@@ -14,10 +13,9 @@ from pydantic import BaseModel
 from src.config.whisper import model
 from src.postprocessing.srt_generator import save_srt
 from src.api.routes.DownloadFile import router as download_route
+from src.config.Yt_dlp import DownloadYTVideo
 
 app = FastAPI(title="ScripTum ML API")
-
-
 
 
 origins = [
@@ -60,7 +58,6 @@ def downloadFile(url: str, destination: Path):
                 f.write(chunks)
 
 
-
 class Item(BaseModel):
     media_url: str
 
@@ -75,15 +72,23 @@ async def scriptum(item: Item):
         raise HTTPException(status_code=400, detail="Invalid media URL")
 
     raw_name = Path(media_url).stem
+    print("raw name : ", raw_name)
     original_ext = Path(media_url).suffix
+    print("original_ext : ", original_ext)
 
     safe_name = clean_filename(raw_name)
+    print("Safe name : ", safe_name)
+
     unique_Id = uuid.uuid4().hex[:8]
 
     media_path = MEDIA_DIR / f"{safe_name}_{unique_Id}{original_ext}"
+    print("media path : ", media_path)
     srt_path = SRT_DIR / f"{safe_name}_{unique_Id}.srt"
 
-    downloadFile(media_url, media_path)
+    if "youtube" or "youtu.be" in media_url:
+        media_path = DownloadYTVideo(media_path, media_url)
+    else:
+        downloadFile(media_url, media_path)
 
     try:
         result = model.transcribe(str(media_path), fp16=False)

@@ -83,10 +83,8 @@ export const GenerateTranscript = [
     }
 ];
 
-
-
 export const GenerateYoutubeTranscript = async (req: Request, res: Response) => {
-    const YTURL  = req.query.Yt_url as string;
+    const YTURL = req.query.Yt_url as string;
     const User_Id = req.user as any;
     if (!User_Id) {
         return res.status(400).json({ message: "user id not defined!" });
@@ -101,11 +99,13 @@ export const GenerateYoutubeTranscript = async (req: Request, res: Response) => 
 
         const videoId = match ? match[1] : ''
 
-        const segments = response.map((item: any) => ({
+        const segments = response.result.map((item: any) => ({
             start: item.start,
             end: item.end,
             text: item.text
         }));
+
+        console.log(segments)
 
         const videoMetadata = await YouTube.videos.list({
             id: [videoId],
