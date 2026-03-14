@@ -1,7 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
 import transcriptsModel from "../models/transcripts.model";
-import mongoose from "mongoose";
-import cloudinary from "../configs/Cloudinary.config";
 
 export const TranscriptHisotry = async (req: Request, res: Response) => {
     try {

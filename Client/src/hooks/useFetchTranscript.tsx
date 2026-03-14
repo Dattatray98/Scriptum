@@ -1,8 +1,9 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { useAxios } from "./useAxios";
+import { useTransChat } from "./useFetchChatHistory";
 
-export const useFetchTranscript = (file: File | null,) => {
+export const useFetchTranscript = () => {
     const [Loading, setLoading] = useState<boolean>(false);
     const [Transcript, setTranscript] = useState<[
         { id: number, start: number, end: number, text: string }
@@ -11,9 +12,10 @@ export const useFetchTranscript = (file: File | null,) => {
     const navigate = useNavigate();
     const [videoName, setVideoName] = useState<string>()
     const api = useAxios();
+    const { FetchTransChats } = useTransChat();
 
-    const transcriptfetching = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const transcriptfetching = async (file: File | null) => {
+
         if (!file) {
             alert("Please select file first");
             return;
@@ -64,6 +66,8 @@ export const useFetchTranscript = (file: File | null,) => {
             console.log(error);
         } finally {
             setLoading(false);
+            FetchTransChats();
+
         }
 
         return videoName
@@ -71,3 +75,38 @@ export const useFetchTranscript = (file: File | null,) => {
 
     return { Transcript, Loading, srtFile, transcriptfetching, videoName };
 };
+
+
+
+
+export const useFetchYoutubeTranscript = () => {
+    const [Loading, setLoading] = useState<boolean>(false);
+    // const [Error, setError] = useState<string>('');
+    const [Transcript, setTranscript] = useState<[
+        { id: number, start: number, end: number, text: string }
+    ]>();
+    const [srtFile, setSrtFile] = useState("");
+
+    const [videoName, setVideoName] = useState<string>()
+
+    const api = useAxios();
+
+    const fetchTranscript = async (url: string) => {
+        try {
+            setLoading(true);
+            const response = await api.post(`/transcribe/Yturl?Yt_url=${url}`);
+
+            setTranscript(response.data.response);
+            setSrtFile(response.data.srtFile)
+            setVideoName(response.data.title);
+
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+
+    return { Transcript, Loading, srtFile, videoName, fetchTranscript }
+}

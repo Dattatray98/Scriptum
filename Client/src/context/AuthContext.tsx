@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useEffect, useState } from "react";
 import { useAxios } from "../hooks/useAxios";
 
@@ -41,7 +42,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     handleProfile();
-  }, [api]); // re-run when api instance (and therefore token) changes
+  }, []); // re-run when api instance (and therefore token) changes
 
   const logout = () => {
     localStorage.removeItem("token");

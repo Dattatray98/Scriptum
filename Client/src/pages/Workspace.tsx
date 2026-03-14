@@ -1,11 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { WiStars } from "react-icons/wi";
 import Sidebar from "../components/Sidebar"
-import { useState } from "react";
-import { useFetchTranscript } from "../hooks/useFetchTranscript";
+import React, { useState } from "react";
+import { useFetchTranscript, useFetchYoutubeTranscript } from "../hooks/useFetchTranscript";
 import { useDownloadFile } from "../hooks/useDownloadFile";
 import ContentTab from "../components/ContentTab";
 import { useTransChat } from "../hooks/useFetchChatHistory";
 import WindowComponent from "../components/WindowComponent";
+
+
+const uploadMode = [
+  { id: 1, label: "File Upload" },
+  { id: 2, label: "Youtube Link" }
+]
 
 const Workspace = () => {
 
@@ -18,12 +25,15 @@ const Workspace = () => {
   const [deleteChat, setDeleteChat] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [chat_id, setChat_id] = useState<string | null>(null);
+  const [TransMode, setTransMode] = useState(1);
+  const [yturl, setYturl] = useState<any>();
 
 
   // Custom Hooks 
-  const { Loading, transcriptfetching, srtFile, videoName } = useFetchTranscript(File);
+  const { Loading, transcriptfetching, srtFile, videoName } = useFetchTranscript();
   const { DownloadSRT } = useDownloadFile(srtFile, videoName || "");
   const { transChats } = useTransChat();
+  const { fetchTranscript } = useFetchYoutubeTranscript();
   // const {transHistory} = useTransHistory(chat_id);
 
 
@@ -44,6 +54,10 @@ const Workspace = () => {
     setFile(e.target.files?.[0] || null);
   }
 
+  const handleURLchange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setYturl(e.target.value);
+    console.log(yturl);
+  }
 
   return (
     <div className={`h-screen flex p-2 bg-gray-200 ${IsSidebarOpen ? "gap-2" : ""}`}>
@@ -99,27 +113,50 @@ const Workspace = () => {
             <div className=" h-full w-[45%] px-15 flex items-center">
               <div className="border border-gray-200 shadow-sm bg-gray-50 rounded-2xl py-10  flex flex-col gap-8 justify-center items-center cursor-default w-full">
                 <div className="px-5 flex w-[90%] justify-between">
-                  <button className="border border-gray-50 shadow-sm bg-[#0D7281] text-white font-medium px-5 py-2 rounded-xl w-[47%] cursor-pointer ">File Upload</button>
-                  <button className="border border-gray-50 shadow-sm bg-gray-300 font-medium px-5 py-2 rounded-xl w-[47%] cursor-pointer ">YouTube Link</button>
-                </div>
-                <p className="font-medium text-xl text-gray-700">Upload Your Content</p>
 
-                <div className="border-2 border-dashed border-[#8ABBC2] hover:border-[#0D7281] transition-all duration-300 w-[80%] h-[25vh] rounded-xl flex flex-col justify-center items-center gap-5" onClick={() => document.getElementById('fileInput')?.click()}>
-                  <p className="text-xl text-center font-medium text-gray-700">{File ? `${File.name}` : "Drag & Drop or Browse Your File Here"}</p>
-                  <button className="px-4 py-2 bg-gray-300 border border-gray-50 shadow-sm rounded-xl font-medium text-lg cursor-pointer">Click to Browse File</button>
+                  {uploadMode.map((item) => (
+                    <button className={`border border-gray-50 shadow-sm transition-all duration-500 font-medium px-5 py-2 rounded-xl w-[47%] cursor-pointer ${TransMode == item.id ? " bg-[#0D7281] text-white " : "bg-gray-300"}`} onClick={() => setTransMode(item.id)}>{item.label}</button>
+                  ))}
                 </div>
-                <input
-                  id="fileInput"
-                  type="file"
-                  className="hidden"
-                  onChange={handlefileChange}
-                />
+                <p className="font-medium text-xl text-gray-700">{TransMode === 2 ? "Paste your YouTube link" : "Upload Your Content"}</p>
+
+                {TransMode === 2 ?
+                  <div className="h-full w-full flex justify-center items-center">
+                    <div className="border-2 border-dashed border-[#8ABBC2] hover:border-[#0D7281] transition-all duration-300 w-[80%] h-[25vh] rounded-xl flex flex-col justify-center items-center gap-5">
+                      <p></p>
+                      <div>
+                        <input type="text" value={yturl} placeholder="Paste Your Link here" onChange={handleURLchange} />
+                      </div>
+                    </div>
+                  </div>
+                  :
+                  <div className="h-full w-full flex justify-center items-center">
+
+                    <div className="border-2 border-dashed border-[#8ABBC2] hover:border-[#0D7281] transition-all duration-300 w-[80%] h-[25vh] rounded-xl flex flex-col justify-center items-center gap-5" onClick={() => document.getElementById('fileInput')?.click()}>
+                      <p className="text-xl text-center font-medium text-gray-700">{File ? `${File.name}` : "Drag & Drop or Browse Your File Here"}</p>
+                      <button className="px-4 py-2 bg-gray-300 border border-gray-50 shadow-sm rounded-xl font-medium text-lg cursor-pointer">Click to Browse File</button>
+                    </div>
+                    <input
+                      id="fileInput"
+                      type="file"
+                      className="hidden"
+                      onChange={handlefileChange}
+                    />
+                  </div>}
+
 
                 <div>
-                  <button className="border px-5 py-2 rounded-xl font-medium text-lg bg-linear-to-r from-blue-600 via-cyan-600 to-cyan-700 cursor-pointer text-white hover:scale-[0.98] transition-all duration-300 "
-                    onClick={transcriptfetching}
-                    disabled={Loading}
-                  >{Loading ? "Transcribing" : "Generate Transcript"}</button>
+                  {TransMode === 1 ? (
+                    <button className="border px-5 py-2 rounded-xl font-medium text-lg bg-linear-to-r from-blue-600 via-cyan-600 to-cyan-700 cursor-pointer text-white hover:scale-[0.98] transition-all duration-300 "
+                      onClick={() => transcriptfetching(File)}
+                      disabled={Loading}
+                    >{Loading ? "Transcribing" : "Generate Transcript"}</button>
+                  ) : (
+                    <button className="border px-5 py-2 rounded-xl font-medium text-lg bg-linear-to-r from-blue-600 via-cyan-600 to-cyan-700 cursor-pointer text-white hover:scale-[0.98] transition-all duration-300 "
+                      onClick={() => fetchTranscript(yturl)}
+                      disabled={Loading}
+                    >{Loading ? "Transcribing" : "Generate Transcript"}</button>
+                  )}
                 </div>
               </div>
             </div>

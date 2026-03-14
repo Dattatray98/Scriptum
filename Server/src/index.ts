@@ -1,5 +1,3 @@
-
-import express from "express";
 import { MongoConnect } from "./configs/MongoDB.config";
 import app from "./app";
 

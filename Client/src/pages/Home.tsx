@@ -97,12 +97,11 @@ const Scriptum = () => {
                                     className=""
                                 >
                                     <button className={`bg-linear-to-br from-purple-200 via-indigo-200 to-blue-200 py-2 px-5 w-60 font-medium transition-all duration-500 cursor-pointer shadow-sm rounded-xl   ${TransMode === item.id ? "text-white bg-linear-to-br from-purple-600 via-indigo-600 to-blue-600" : ""}`}>{item.label}</button>
-
                                 </div>
                             ))}
                         </div>
 
-                        <p className="text-lg font-medium text-gray-500">Upload Your Content</p>
+                        <p className="text-lg font-medium text-gray-500">Upload Your Content this is mine</p>
                         <div className="flex flex-col justify-center items-center gap-10">
                             <div className="h-[20vh] w-[60vh] border-2 border-dashed border-gray-300 hover:border-purple-600 shadow-sm hover:shadow-md rounded-xl flex items-center justify-center cursor-pointer transition-all duration-300 px-5 flex-col gap-5"
                                 onClick={() => document.getElementById('fileInput')?.click()}

@@ -1,4 +1,3 @@
-import { url } from "inspector";
 import mongoose, { Schema } from "mongoose";
 
 const TranscriptSegmentSchema = new Schema(
@@ -30,9 +29,9 @@ const TranscriptSchema = new Schema(
 
         media: {
             url: { type: String, required: true },
-            public_id: { type: String, required: true },
-            duration: { type: String, required: true },
-            type: { type: String, required: true },
+            public_id: { type: String },
+            duration: { type: String },
+            type: { type: String },
         },
 
         original_transcript: {
